@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -12,11 +13,12 @@ import jakarta.persistence.OneToMany;
 public class Participante {
 
     @Id
-    private long id;
+    private long participante_id;
     private String nome;
     private String email;
     private Boolean admin;
 
+
     @OneToMany(mappedBy = "participante")
-    private List<Corrida> corridasFeitas;
+    private List<Resultado> resultados;
 }
