@@ -1,4 +1,4 @@
-package br.edu.ifpb.pweb2.question_mark.models;
+package br.edu.ifpb.pweb2.question_mark.model;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class Participante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    
+
     @Column(unique = true)
     private String email;
     private Boolean admin;

@@ -1,4 +1,4 @@
-package br.edu.ifpb.pweb2.question_mark.models;
+package br.edu.ifpb.pweb2.question_mark.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
