@@ -9,20 +9,26 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
+
 
 @Entity
-public class Pergunta {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
+@Getter
+@Setter
 
-@ElementCollection
-private List<String> alternativas;    
-private String titulo;
-private Integer respostaCorreta;
+public class Pergunta {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String enunciado; 
+    private Integer respostaCorreta;
+
+    @ElementCollection
+    private List<String> alternativas;
 
     @ManyToOne
     @JoinColumn(name = "corrida_id")
     private Corrida corrida;
-
 }

@@ -10,21 +10,29 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-@Entity
-public class Resultado {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long resultado_id;
 
- 
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Entity
+@Getter
+@Setter
+
+public class Resultado {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "participante_id")
+    private Participante participante;
+
     @ManyToOne
     @JoinColumn(name = "corrida_id")
     private Corrida corrida;
 
     private BigDecimal pontuacao;
     private LocalDateTime dataHora;
-
-    @ManyToOne
-    @JoinColumn(name = "participante_id")
-    private Participante participante;
 }
