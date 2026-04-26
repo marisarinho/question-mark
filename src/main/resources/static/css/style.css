@@ -148,3 +148,35 @@ input:focus {
     font-weight: 600;
     margin-left: 6px;
 }
+
+/* Layout para a Lista de Corridas (Múltiplos Cards) */
+.cards-container {
+    display: grid;
+    /* Cria colunas automáticas: os cards têm no mínimo 300px. 
+       Se a tela for grande, cabem 3 ou 4 lado a lado. Se for celular, fica 1 só! */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Ajuste rápido para os botões de ação dentro dos cards da lista */
+.card-acoes {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-editar {
+    background-color: #EEEDFE;
+    color: #534AB7;
+    margin-top: 0;
+}
+
+.btn-deletar {
+    background-color: #fde8e8;
+    color: #a32d2d;
+    margin-top: 0;
+}

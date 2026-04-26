@@ -41,7 +41,7 @@ public class AuthController {
         redirect.addFlashAttribute("Mensagem","Usuario Logado com sucesso");
 
         if (participante.getAdmin()) {  
-            return "redirect:/admin";
+            return "redirect:/admin/corridas";
         }
         return "redirect:/home";
     }

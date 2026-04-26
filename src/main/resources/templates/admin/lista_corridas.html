@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Corridas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/admin/corridas/nova}" class="btn">🏁 Nova corrida</a>
+    </div>
+
+
+    <div th:if="${mensagem}" class="alert alert-success" th:text="${mensagem}"></div>
+
+
+    <div class="cards-container">
+       
+        <div class="card" th:each="corrida : ${corridas}">
+           
+            <h2 th:text="${corrida.titulo}">Título Fictício (some quando rodar)</h2>
+            <p th:text="${corrida.descricao}">Descrição Fictícia</p>
+           
+            <div class="card-detalhes">
+                <span>Status: <b th:text="${corrida.ativa ? 'Ativa' : 'Inativa'}"></b></span>
+                <span>Tempo: <b th:text="${corrida.tempoSegundos}"></b>s</span>
+            </div>
+
+
+            <hr>
+
+
+            <div class="card-acoes">
+                <a th:href="@{/admin/corridas/{id}/editar(id=${corrida.id})}" class="btn btn-editar">Editar</a>
+               
+                <form th:action="@{/admin/corridas/{id}/deletar(id=${corrida.id})}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-deletar">Deletar</button>
+                </form>
+            </div>
+           
+        </div> </div> </body>
+</html>
+

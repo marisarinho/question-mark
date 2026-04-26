@@ -1,22 +1,16 @@
 package br.edu.ifpb.pweb2.question_mark.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.service.CorridaService;
-import jakarta.websocket.server.PathParam;
-
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.PostMapping;
 
 
 
@@ -33,20 +27,20 @@ public class CorridaController {
     @GetMapping("")
     public String exibirCorridas(Model model){
         model.addAttribute("corridas", corridaService.todasCorridas());
-        return "lista_corridas";
+        return "admin/lista_corridas";
     }
 
 
     @GetMapping("/nova")
     public String exibirForm(Model model)  {
         model.addAttribute("corrida",new Corrida());
-        return "form";
+        return "admin/form";
     }
 
     @PostMapping("/nova")
     public String formCorrida(Corrida corrida, RedirectAttributes redirect){
         corridaService.saveCorrida(corrida);
-        redirect.addFlashAttribute("Mensagem","Usuario criada com sucesso");
+        redirect.addFlashAttribute("mensagem","Usuario criada com sucesso");
         return "redirect:/admin/corridas";
     }
 
@@ -54,7 +48,7 @@ public class CorridaController {
     public String exibirFormDaCorrida(@PathVariable Long id,Model model) {
         Corrida corridaEncontrada = corridaService.findById(id);
         model.addAttribute("corrida",corridaEncontrada);
-        return "form";
+        return "admin/form";
 
     }
     
