@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lobby - Question Mark</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+    <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
+        <h1 style="color: #333;">🏁 Lobby de Corridas</h1>
+        <h2 style="color: #555;">Olá, <span th:text="${nomeParticipante}"></span>! Preparado para o desafio?</h2>
+    </div>
+
+    <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+        <a th:href="@{/logout}" class="btn" style="background-color: #d9534f;">🚪 Sair</a>
+    </div>
+
+    <div class="cards-container">
+        
+        <div class="card" th:each="corrida : ${corridasAtivas}">
+            
+            <h2 th:text="${corrida.titulo}">Título da Corrida</h2>
+            <p th:text="${corrida.descricao}">Descrição da corrida...</p>
+            
+            <div class="card-detalhes" style="background-color: #f9f9f9; padding: 10px; border-radius: 5px; margin-top: 15px;">
+                <span>⏱ Tempo: <b th:text="${corrida.tempoSegundos}"></b>s</span><br>
+                <span>📝 Quantidade de perguntas: <b th:text="${#lists.size(corrida.perguntas)}"></b></span>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid #eee; margin: 15px 0;">
+
+            <div class="card-acoes" style="display: flex; justify-content: center;">
+                <a th:href="@{/corridas/{id}/iniciar(id=${corrida.id})}" class="btn" style="background-color: #28a745; width: 100%; text-align: center;">🚀 Iniciar Corrida</a>
+            </div>
+            
+        </div>
+
+        <div th:if="${#lists.isEmpty(corridasAtivas)}" style="text-align: center; width: 100%; color: #888; padding: 20px;">
+            <h3>Nenhuma corrida ativa no momento.</h3>
+            <p>Aguarde o administrador liberar um novo desafio!</p>
+        </div>
+
+    </div>
+
+</body>
+</html>
