@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Perguntas da Corrida</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <h1 th:text="'Perguntas: ' + ${corrida.titulo}"></h1>
+    <a th:href="@{/admin/corridas/{id}/perguntas/nova(id=${corrida.id})}" class="btn">➕ Adicionar Pergunta</a>
+    <a th:href="@{/admin/corridas}" class="btn">⬅ Voltar para Corridas</a>
+
+    <div th:if="${mensagem}" class="alert alert-success" th:text="${mensagem}"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Enunciado</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${perguntas}">
+                <td th:text="${p.enunciado}"></td>
+                <td>
+                    <form th:action="@{/admin/corridas/{cId}/perguntas/{pId}/deletar(cId=${corrida.id}, pId=${p.id})}" method="post">
+                        <button type="submit" class="btn btn-deletar">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

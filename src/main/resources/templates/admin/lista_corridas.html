@@ -33,6 +33,7 @@
 
 
             <div class="card-acoes">
+                <a th:href="@{/admin/corridas/{id}/perguntas(id=${corrida.id})}" class="btn">⚙ Gerenciar Perguntas</a>
                 <a th:href="@{/admin/corridas/{id}/editar(id=${corrida.id})}" class="btn btn-editar">Editar</a>
                
                 <form th:action="@{/admin/corridas/{id}/deletar(id=${corrida.id})}" method="post" style="display: inline;">

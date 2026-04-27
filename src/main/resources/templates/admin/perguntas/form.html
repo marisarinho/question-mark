@@ -1,0 +1,15 @@
+<form th:action="@{/admin/corridas/{id}/perguntas/nova(id=${corridaId})}" th:object="${pergunta}" method="post">
+    <label>Enunciado:</label>
+    <input type="text" th:field="*{enunciado}" required />
+
+    <label>Alternativas (digite as 4):</label>
+    <input type="text" name="alternativas" placeholder="Opção 0" required />
+    <input type="text" name="alternativas" placeholder="Opção 1" required />
+    <input type="text" name="alternativas" placeholder="Opção 2" required />
+    <input type="text" name="alternativas" placeholder="Opção 3" required />
+
+    <label>Índice da Resposta Correta (0 a 3):</label>
+    <input type="number" th:field="*{respostaCorreta}" min="0" max="3" required />
+
+    <button type="submit" class="btn">Salvar Pergunta</button>
+</form>
