@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Pergunta - Question Mark</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="card">
+        <h2>❓ Nova Pergunta</h2>
+        <div class="divider"></div>
+
+        <form th:action="@{/admin/corridas/{id}/perguntas/nova(id=${corridaId})}" th:object="${pergunta}" method="post">
+            
+            <label for="enunciado">Enunciado da Pergunta:</label>
+            <input type="text" id="enunciado" th:field="*{enunciado}" placeholder="Ex: Qual a capital do Brasil?" required />
+
+            <div class="divider" style="margin: 20px 0; height: 1px; background-color: #eee;"></div>
+            
+            <label>Alternativas (Preencha as 4 opções):</label>
+            <input type="text" name="alternativas" placeholder="Opção 0 (Ex: Buenos Aires)" required style="margin-bottom: 10px;" />
+            <input type="text" name="alternativas" placeholder="Opção 1 (Ex: Brasília)" required style="margin-bottom: 10px;" />
+            <input type="text" name="alternativas" placeholder="Opção 2 (Ex: Rio de Janeiro)" required style="margin-bottom: 10px;" />
+            <input type="text" name="alternativas" placeholder="Opção 3 (Ex: São Paulo)" required />
+
+            <div class="divider" style="margin: 20px 0; height: 1px; background-color: #eee;"></div>
+
+            <label for="respostaCorreta">Índice da Resposta Correta (0 a 3):</label>
+            <input type="number" id="respostaCorreta" th:field="*{respostaCorreta}" min="0" max="3" placeholder="Ex: 1 (Se a Opção 1 for a certa)" required />
+
+            <button type="submit" class="btn" style="margin-top: 15px;">Salvar Pergunta</button>
+            
+            <a th:href="@{/admin/corridas/{id}/perguntas(id=${corridaId})}" class="btn" style="background-color: #666; margin-top: 10px; display: block; text-align: center;">Cancelar</a>
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Perguntas da Corrida</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+    <div style="margin-bottom: 30px; display: flex; justify-content: center; gap: 15px; padding-top: 20px;">
+        <a th:href="@{/admin/corridas}" class="btn" style="background-color: #666;">⬅ Voltar para Corridas</a>
+        <a th:href="@{/admin/corridas/{id}/perguntas/nova(id=${corrida.id})}" class="btn">➕ Adicionar Pergunta</a>
+    </div>
+
+    <h2 style="text-align: center; color: #333; margin-bottom: 30px;">
+        📝 Perguntas da Corrida: <span th:text="${corrida.titulo}"></span>
+    </h2>
+
+    <div th:if="${mensagem}" class="alert alert-success" th:text="${mensagem}" style="max-width: 600px; margin: 0 auto 20px auto; text-align: center;"></div>
+
+    <div class="cards-container">
+        
+        <div class="card" th:each="p, iterStat : ${perguntas}">
+            <h3 style="color: #555; font-size: 1.1em; margin-bottom: 10px;" th:text="'Pergunta ' + ${iterStat.index + 1}">Pergunta 1</h3>
+            <p style="font-size: 1.2em; font-weight: bold; margin-bottom: 15px;" th:text="${p.enunciado}">Enunciado da pergunta vai aqui</p>
+            
+            <hr style="border: none; border-top: 1px solid #eee; margin: 15px 0;">
+
+            <div class="card-acoes" style="display: flex; justify-content: flex-end;">
+                <form th:action="@{/admin/corridas/{cId}/perguntas/{pId}/deletar(cId=${corrida.id}, pId=${p.id})}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-deletar">🗑 Excluir</button>
+                </form>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(perguntas)}" style="text-align: center; width: 100%; color: #888; padding: 20px;">
+            <h3>Nenhuma pergunta cadastrada ainda.</h3>
+            <p>Clique no botão acima para começar a adicionar perguntas a esta corrida.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>
