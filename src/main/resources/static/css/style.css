@@ -1,182 +1,398 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+/* ==========================================================================
+   VARIÁVEIS DE CORES (Sua Identidade Roxa)
+   ========================================================================== */
+:root {
+    --purple-primary: #7b2cbf;     /* Roxo vibrante principal */
+    --purple-dark: #5a189a;        /* Roxo escuro para hover */
+    --purple-light: #e0aaff;       /* Roxo bem clarinho para detalhes */
+    --purple-bg: #f8f5fb;          /* Fundo da página com um toque quase imperceptível de roxo */
+    
+    --text-dark: #2d2331;          /* Texto principal quase preto */
+    --text-muted: #6c757d;         /* Texto secundário acinzentado */
+    
+    --white: #ffffff;
+    --danger: #e63946;             /* Vermelho para deletar */
+    --warning: #f4a261;            /* Laranja/Amarelo para editar */
 }
 
+/* ==========================================================================
+   RESET E ESTILOS GERAIS
+   ========================================================================== */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #1a1033;
+    background-color: var(--purple-bg);
+    font-family: 'Poppins', sans-serif;    
+    color: var(--text-dark);
+    margin: 0;
+    padding: 30px;
+    line-height: 1.6;
 }
 
+h2 {
+    color: var(--purple-primary);
+    margin-top: 0;
+    font-weight: 700;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #eaeaea;
+    margin: 20px 0;
+}
+
+/* ==========================================================================
+   ESTILOS DE BOTÕES (.btn)
+   ========================================================================== */
+.btn {
+    display: inline-block;
+    background-color: var(--purple-primary);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: var(--purple-dark);
+    transform: translateY(-2px); /* Efeito de flutuar ao passar o mouse */
+    box-shadow: 0 4px 10px rgba(123, 44, 191, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0); /* Aperta o botão pra baixo ao clicar */
+}
+
+/* Cores específicas de botões */
+.btn-editar {
+    background-color: var(--warning);
+}
+
+.btn-editar:hover {
+    background-color: #e78c43;
+    box-shadow: 0 4px 10px rgba(244, 162, 97, 0.3);
+}
+
+.btn-deletar {
+    background-color: var(--danger);
+}
+
+.btn-deletar:hover {
+    background-color: #d62828;
+    box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+}
+
+/* ==========================================================================
+   ESTILOS DOS CARTÕES (.card)
+   ========================================================================== */
+.card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-top: 5px solid var(--purple-primary); /* Detalhe roxo no topo do card */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efeito ao passar o mouse apenas na listagem (para não afetar o formulário) */
+.cards-container .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(123, 44, 191, 0.15);
+}
+
+/* ==========================================================================
+   LISTA DE CORRIDAS (lista_corridas.html)
+   ========================================================================== */
+/* Grid responsivo: organiza os cards lado a lado automaticamente */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.card-detalhes {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f8f9fa;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-size: 14px;
+    border-left: 4px solid var(--purple-light);
+}
+
+.card-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Alerta de sucesso */
+.alert-success {
+    background-color: #2a9d8f;
+    color: white !important; /* Força a cor branca ignorando o erro de digitação no HTML */
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(42, 157, 143, 0.2);
+    margin-bottom: 25px;
+}
+
+/* ==========================================================================
+   FORMULÁRIO (form.html)
+   ========================================================================== */
+/* Centraliza o formulário na tela */
 .page-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 2rem;
+    min-height: 80vh;
 }
 
-.card {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 40px;
+.page-wrapper .card {
     width: 100%;
-    max-width: 420px;
+    max-width: 500px; /* Largura máxima do formulário */
 }
 
-/* Logo */
+.divider {
+    height: 2px;
+    background: linear-gradient(to right, var(--purple-primary), transparent);
+    margin: 15px 0 25px 0;
+}
+
+/* Estilização dos inputs (caixas de texto) */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 14px;
+}
+
+input[type="text"], 
+input[type="number"]
+input[type="email"] 
+{
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #d1c4e9;
+    border-radius: 8px;
+    box-sizing: border-box; /* Garante que o padding não quebre a largura */
+    font-family: inherit;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+/* Efeito ao clicar no input (borda roxa) */
+input[type="text"]:focus, 
+input[type="number"]:focus 
+input[type="email"]:focus{
+    border-color: var(--purple-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(123, 44, 191, 0.2);
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--purple-primary); /* Deixa a caixinha do checkbox roxa */
+    cursor: pointer;
+}
+
+/* Botão de salvar pega a largura toda no formulário */
+form button[type="submit"] {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px;
+}
+
+/* ==========================================================================
+   ADIÇÕES PARA AS PÁGINAS DE PERGUNTAS
+   ========================================================================== */
+
+/* Botão cinza de Voltar / Cancelar */
+.btn-secundario {
+    background-color: var(--text-muted);
+}
+.btn-secundario:hover {
+    background-color: #495057;
+    box-shadow: 0 4px 10px rgba(108, 117, 125, 0.3);
+}
+
+/* Área dos botões no topo da listagem de perguntas */
+.acoes-topo {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding-top: 20px;
+}
+
+/* Título centralizado no topo */
+.titulo-pagina {
+    text-align: center;
+    color: var(--purple-dark);
+    margin-bottom: 30px;
+}
+
+/* Estilo para quando não houver nenhuma pergunta cadastrada */
+.empty-state {
+    text-align: center;
+    grid-column: 1 / -1; /* Força a ocupar a tela inteira no Grid */
+    color: var(--text-muted);
+    padding: 50px 20px;
+    background-color: var(--white);
+    border-radius: 12px;
+    border: 2px dashed var(--purple-light);
+}
+
+/* Ajustes de texto dentro do cartão de pergunta */
+.pergunta-header {
+    color: var(--purple-primary);
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.pergunta-enunciado {
+    font-size: 1.15em;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--text-dark);
+}
+
+/* No formulário de perguntas, os botões ficam um embaixo do outro */
+.btn-block {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+
+/* ==========================================================================
+   TELA DE LOGIN
+   ========================================================================== */
+
+/* Área da Logo */
 .logo {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 .logo-icon {
-    width: 64px;
-    height: 64px;
-    background-color: #6c3fc5;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 12px;
-    font-size: 28px;
+    font-size: 3rem; /* Deixa o emoji grandão */
+    margin-bottom: 5px;
+    animation: bounce 2s infinite ease-in-out; /* Uma animação sutil para dar vida */
+}
+
+/* Animação do emoji flutuando */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 .logo h1 {
-    font-size: 22px;
-    color: #3C3489;
-    font-weight: 700;
-    letter-spacing: 1px;
+    color: var(--purple-dark);
+    font-weight: 800;
+    margin: 0 0 5px 0;
+    letter-spacing: -1px; /* Deixa as letras mais juntinhas e modernas */
+    font-size: 1.8rem;
 }
 
 .logo p {
-    font-size: 13px;
-    color: #888888;
-    margin-top: 4px;
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
-/* Divisor */
-.divider {
-    height: 1px;
-    background-color: #ede8fb;
-    margin: 16px 0;
-}
-
-/* Flash messages */
+/* Mensagens do sistema */
 .flash-erro {
-    background-color: #fde8e8;
-    border-left: 4px solid #e24b4a;
-    color: #a32d2d;
-    padding: 10px 14px;
-    border-radius: 6px;
-    font-size: 13px;
-    margin-bottom: 16px;
+    background-color: #fce8e8;
+    color: var(--danger);
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--danger);
+    font-weight: bold;
+    font-size: 14px;
 }
 
 .flash-ok {
-    background-color: #eaf3de;
-    border-left: 4px solid #639922;
-    color: #3b6d11;
-    padding: 10px 14px;
-    border-radius: 6px;
-    font-size: 13px;
-    margin-bottom: 16px;
-}
-
-/* Formulário */
-label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: #534AB7;
-    margin-bottom: 6px;
-    margin-top: 14px;
-}
-
-input {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1.5px solid #CECBF6;
+    background-color: #e6f6f4;
+    color: #2a9d8f;
+    padding: 12px;
     border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-left: 4px solid #2a9d8f;
+    font-weight: bold;
     font-size: 14px;
-    color: #26215C;
-    outline: none;
-    transition: border 0.2s;
-}
-
-input:focus {
-    border-color: #6c3fc5;
-    box-shadow: 0 0 0 3px #EEEDFE;
-}
-
-/* Botão */
-.btn {
-    width: 100%;
-    margin-top: 24px;
-    padding: 13px;
-    background-color: #6c3fc5;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    letter-spacing: 0.5px;
-    transition: background 0.2s;
-}
-
-.btn:hover {
-    background-color: #534AB7;
 }
 
 /* Rodapé */
 .footer {
+    margin-top: 30px;
     text-align: center;
-    margin-top: 18px;
-    font-size: 12px;
-    color: #aaaaaa;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-top: 1px solid #eaeaea;
+    padding-top: 15px;
 }
 
+/* Badge (Etiqueta do IFPB) */
 .badge {
-    display: inline-block;
-    background-color: #EEEDFE;
-    color: #534AB7;
+    background-color: var(--purple-primary);
+    color: var(--white);
+    padding: 4px 8px;
     border-radius: 20px;
-    padding: 3px 10px;
-    font-size: 11px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 5px;
+    display: inline-block;
+    letter-spacing: 1px;
+}
+
+
+/* ==========================================================================
+   TELA DE LOBBY (VISÃO DO PARTICIPANTE)
+   ========================================================================== */
+
+/* Cabeçalho centralizado */
+.lobby-header {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.subtitulo {
+    color: var(--text-muted);
     font-weight: 600;
-    margin-left: 6px;
-}
-
-/* Layout para a Lista de Corridas (Múltiplos Cards) */
-.cards-container {
-    display: grid;
-    /* Cria colunas automáticas: os cards têm no mínimo 300px. 
-       Se a tela for grande, cabem 3 ou 4 lado a lado. Se for celular, fica 1 só! */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Ajuste rápido para os botões de ação dentro dos cards da lista */
-.card-acoes {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.btn-editar {
-    background-color: #EEEDFE;
-    color: #534AB7;
+    font-size: 1.2rem;
     margin-top: 0;
+    margin-bottom: 20px;
 }
 
-.btn-deletar {
-    background-color: #fde8e8;
-    color: #a32d2d;
-    margin-top: 0;
+/* Botão de Iniciar Corrida (Verde Moderno) */
+.btn-sucesso {
+    background-color: #2a9d8f; 
+    color: var(--white);
+    font-size: 1.1rem; /* Deixa a letra um pouco maior pra chamar atenção */
+    padding: 12px;
+}
+
+.btn-sucesso:hover {
+    background-color: #21867a;
+    box-shadow: 0 4px 12px rgba(42, 157, 143, 0.35);
 }

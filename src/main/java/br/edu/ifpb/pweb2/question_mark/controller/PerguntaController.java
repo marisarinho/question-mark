@@ -10,9 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.ifpb.pweb2.question_mark.model.Corrida;
+import br.edu.ifpb.pweb2.question_mark.model.NivelDificuldade;
 import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
 import br.edu.ifpb.pweb2.question_mark.repository.PerguntaRepository;
 import br.edu.ifpb.pweb2.question_mark.service.CorridaService;
+import br.edu.ifpb.pweb2.question_mark.service.PerguntaService;
+
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 @RequestMapping("/admin/corridas/{corridaId}/perguntas")
@@ -24,6 +29,8 @@ public class PerguntaController {
     @Autowired
     private CorridaService corridaService;
 
+    @Autowired
+    private PerguntaService perguntaService;
     
     @GetMapping
     public String listar(@PathVariable Long corridaId, Model model) {
@@ -40,6 +47,7 @@ public class PerguntaController {
         pergunta.setCorrida(corridaService.findById(corridaId));
         model.addAttribute("pergunta", pergunta);
         model.addAttribute("corridaId", corridaId);
+        model.addAttribute("niveis", NivelDificuldade.values());
         return "admin/perguntas/form";
     }
 
@@ -52,6 +60,11 @@ public class PerguntaController {
         flash.addFlashAttribute("mensagem", "Pergunta adicionada com sucesso!");
         return "redirect:/admin/corridas/" + corridaId + "/perguntas";
     }
+
+    
+        
+    
+    
 
     @PostMapping("/{perguntaId}/deletar")
     public String deletar(@PathVariable Long corridaId, @PathVariable Long perguntaId, RedirectAttributes flash) {

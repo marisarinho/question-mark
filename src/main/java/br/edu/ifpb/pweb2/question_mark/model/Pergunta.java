@@ -4,6 +4,8 @@ import java.util.List;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,8 +27,12 @@ public class Pergunta {
     private String enunciado; 
     private Integer respostaCorreta;
 
+
     @ElementCollection
     private List<String> alternativas;
+    
+    @Enumerated(EnumType.STRING)
+    private NivelDificuldade nivel;
 
     @ManyToOne
     @JoinColumn(name = "corrida_id")

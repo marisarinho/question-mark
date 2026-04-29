@@ -7,13 +7,11 @@
 </head>
 <body>
 
-    <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
-        <h1 style="color: #333;">🏁 Lobby de Corridas</h1>
-        <h2 style="color: #555;">Olá, <span th:text="${nomeParticipante}"></span>! Preparado para o desafio?</h2>
-    </div>
-
-    <div style="display: flex; justify-content: center; margin-bottom: 30px;">
-        <a th:href="@{/logout}" class="btn" style="background-color: #d9534f;">🚪 Sair</a>
+    <div class="lobby-header">
+        <h1 class="titulo-pagina" style="margin-bottom: 5px;">🏁 Lobby de Corridas</h1>
+        <h2 class="subtitulo">Olá, <span th:text="${nomeParticipante}"></span>! Preparado para o desafio?</h2>
+        
+        <a th:href="@{/logout}" class="btn btn-secundario">🚪 Sair da Sessão</a>
     </div>
 
     <div class="cards-container">
@@ -23,20 +21,20 @@
             <h2 th:text="${corrida.titulo}">Título da Corrida</h2>
             <p th:text="${corrida.descricao}">Descrição da corrida...</p>
             
-            <div class="card-detalhes" style="background-color: #f9f9f9; padding: 10px; border-radius: 5px; margin-top: 15px;">
+            <div class="card-detalhes">
                 <span>⏱ Tempo: <b th:text="${corrida.tempoSegundos}"></b>s</span><br>
                 <span>📝 Quantidade de perguntas: <b th:text="${#lists.size(corrida.perguntas)}"></b></span>
             </div>
 
-            <hr style="border: none; border-top: 1px solid #eee; margin: 15px 0;">
+            <hr>
 
-            <div class="card-acoes" style="display: flex; justify-content: center;">
-                <a th:href="@{/corridas/{id}/iniciar(id=${corrida.id})}" class="btn" style="background-color: #28a745; width: 100%; text-align: center;">🚀 Iniciar Corrida</a>
+            <div class="card-acoes">
+                <a th:href="@{/corridas/{id}/iniciar(id=${corrida.id})}" class="btn btn-sucesso btn-block">🚀 Iniciar Corrida</a>
             </div>
             
         </div>
 
-        <div th:if="${#lists.isEmpty(corridasAtivas)}" style="text-align: center; width: 100%; color: #888; padding: 20px;">
+        <div th:if="${#lists.isEmpty(corridasAtivas)}" class="empty-state">
             <h3>Nenhuma corrida ativa no momento.</h3>
             <p>Aguarde o administrador liberar um novo desafio!</p>
         </div>

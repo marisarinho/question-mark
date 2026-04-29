@@ -50,7 +50,7 @@ public class AuthController {
     public String logout(HttpSession httpSession, RedirectAttributes redirect) {
         httpSession.invalidate();
         redirect.addFlashAttribute("mensagem","logout feto com sucesso");
-        return "redirect:/auth/login";
+        return "redirect:/login";
     }
     
     

@@ -14,7 +14,7 @@ public class AuthInteceptor implements HandlerInterceptor{
         Participante participante = (Participante) request.getSession().getAttribute("participanteLogado");
 
         if(participante==null){
-            response.sendRedirect("/auth/login");
+            response.sendRedirect("/login");
             return false;
         }
         return true;
