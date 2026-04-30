@@ -27,7 +27,7 @@
             <hr>
 
             <div class="card-acoes" style="justify-content: flex-end;">
-                <!-- O display: inline não é mais necessário porque a card-acoes já usa Flexbox no CSS -->
+                <a th:href="@{/admin/corridas/{cId}/perguntas/{pId}/editar(cId=${corrida.id}, pId=${p.id})}" class="btn">✏ Editar</a>
                 <form th:action="@{/admin/corridas/{cId}/perguntas/{pId}/deletar(cId=${corrida.id}, pId=${p.id})}" method="post">
                     <button type="submit" class="btn btn-deletar">🗑 Excluir</button>
                 </form>

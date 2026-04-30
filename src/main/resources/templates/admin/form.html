@@ -16,7 +16,6 @@
       method="post"
       th:object="${corrida}">
 
-            <!-- O ID oculto essencial para a edição -->
             <input type="hidden" th:field="*{id}" />
 
             <label for="titulo">Título da Corrida</label>
@@ -28,16 +27,13 @@
             <label for="tempoSegundos">Tempo (em segundos)</label>
             <input type="number" th:field="*{tempoSegundos}" placeholder="Ex: 3600 (para 1 hora)" required />
 
-            <!-- Coloquei uma classe aqui em vez do style inline -->
             <label class="checkbox-container">
                 <input type="checkbox" th:field="*{ativa}" />
                 Corrida Ativa imediatamente?
             </label>
 
-            <!-- Usando a classe btn-block para ele ficar largo -->
             <button class="btn btn-block" type="submit">Salvar Corrida</button>
            
-            <!-- Usando as classes btn-secundario e btn-block do nosso CSS -->
             <a th:href="@{/admin/corridas}" class="btn btn-secundario btn-block">Cancelar</a>
         </form>
 

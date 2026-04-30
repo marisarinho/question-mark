@@ -1,9 +1,11 @@
 package br.edu.ifpb.pweb2.question_mark.controller;
 
+import br.edu.ifpb.pweb2.question_mark.service.ParticipanteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
 import br.edu.ifpb.pweb2.question_mark.repository.PerguntaRepository;
 import br.edu.ifpb.pweb2.question_mark.service.CorridaService;
 import br.edu.ifpb.pweb2.question_mark.service.PerguntaService;
+import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -23,20 +26,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/admin/corridas/{corridaId}/perguntas")
 public class PerguntaController {
 
-    @Autowired
-    private PerguntaRepository perguntaRepository;
+
+    private final ParticipanteService participanteService;
 
     @Autowired
     private CorridaService corridaService;
 
     @Autowired
     private PerguntaService perguntaService;
+
+    PerguntaController(ParticipanteService participanteService) {
+        this.participanteService = participanteService;
+    }
     
     @GetMapping
     public String listar(@PathVariable Long corridaId, Model model) {
         Corrida corrida = corridaService.findById(corridaId);
         model.addAttribute("corrida", corrida);
-        model.addAttribute("perguntas", perguntaRepository.findByCorridaId(corridaId));
+        model.addAttribute("perguntas", perguntaService.findByCorridaId(corridaId));
         return "admin/perguntas/lista";
     }
 
@@ -56,19 +63,38 @@ public class PerguntaController {
     public String salvar(@PathVariable Long corridaId, Pergunta pergunta, RedirectAttributes flash) {
         Corrida corrida = corridaService.findById(corridaId);
         pergunta.setCorrida(corrida);
-        perguntaRepository.save(pergunta);
+        perguntaService.savePergunta(pergunta);
         flash.addFlashAttribute("mensagem", "Pergunta adicionada com sucesso!");
         return "redirect:/admin/corridas/" + corridaId + "/perguntas";
     }
 
     
-        
+    @GetMapping("/{id}/editar")
+    public String exibirFormDaPergunta(@PathVariable Long corridaId, @PathVariable Long id, Model model) {
+        Pergunta perguntaEncontrada = perguntaService.findById(id);
+            model.addAttribute("pergunta", perguntaEncontrada);
+            model.addAttribute("corridaId", corridaId);
+            model.addAttribute("niveis", NivelDificuldade.values());
+        return "admin/perguntas/form";
+
+    }
+    
+    @PostMapping("/{id}/editar")
+        public String atualizarCorrida(
+                @PathVariable Long id,
+                Pergunta pergunta,
+                RedirectAttributes redirectAttributes) {
+                perguntaService.atualizarPergunta(id, pergunta);
+                redirectAttributes.addFlashAttribute("sucesso", "Pergunta atualizada com sucesso!");
+                return "redirect:/admin/corridas/{corridaId}/perguntas";
+
+        }
     
     
 
     @PostMapping("/{perguntaId}/deletar")
     public String deletar(@PathVariable Long corridaId, @PathVariable Long perguntaId, RedirectAttributes flash) {
-        perguntaRepository.deleteById(perguntaId);
+        perguntaService.deletarPergunta(perguntaId);;
         flash.addFlashAttribute("mensagem", "Pergunta removida!");
         return "redirect:/admin/corridas/" + corridaId + "/perguntas";
     }

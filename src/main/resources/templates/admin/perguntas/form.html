@@ -2,18 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastrar Pergunta - Question Mark</title>
+    <title th:text="${pergunta.id == null} ? 'Cadastrar Pergunta - Question Mark' : 'Editar Pergunta - Question Mark'"></title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
 
 <div class="page-wrapper">
     <div class="card">
-        <h2>❓ Nova Pergunta</h2>
+        <h2 th:text="${pergunta.id == null} ? '❓ Nova Pergunta' : '❓ Editar Pergunta'"></h2>
         
         <div class="divider"></div>
-
-        <form th:action="@{/admin/corridas/{id}/perguntas/nova(id=${corridaId})}" th:object="${pergunta}" method="post">
+        <form th:action="${pergunta.id == null} ? @{/admin/corridas/{corridaId}/perguntas/nova(corridaId=${corridaId})} : @{/admin/corridas/{corridaId}/perguntas/{id}/editar(corridaId=${corridaId}, id=${pergunta.id})}"
+              th:object="${pergunta}" method="post">
             
             <label for="enunciado">Enunciado da Pergunta:</label>
             <input type="text" id="enunciado" th:field="*{enunciado}" placeholder="Ex: Qual a capital do Brasil?" required />
@@ -21,18 +21,16 @@
             <div class="divider"></div>
             
             <label>Alternativas (Preencha as 4 opções):</label>
-            <!-- Removi os style="margin-bottom: 10px;" porque nosso CSS já coloca espaçamento em todos os inputs de texto -->
-            <input type="text" name="alternativas" placeholder="Opção 0 (Ex: Buenos Aires)" required />
-            <input type="text" name="alternativas" placeholder="Opção 1 (Ex: Brasília)" required />
-            <input type="text" name="alternativas" placeholder="Opção 2 (Ex: Rio de Janeiro)" required />
-            <input type="text" name="alternativas" placeholder="Opção 3 (Ex: São Paulo)" required />
+            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[0]}" placeholder="Opção 0 (Ex: Buenos Aires)" required />
+            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[1]}" placeholder="Opção 1 (Ex: Brasília)" required />
+            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[2]}" placeholder="Opção 2 (Ex: Rio de Janeiro)" required />
+            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[3]}" placeholder="Opção 3 (Ex: São Paulo)" required />
 
             <div class="divider"></div>
 
             <label for="respostaCorreta">Índice da Resposta Correta (0 a 3):</label>
             <input type="number" id="respostaCorreta" th:field="*{respostaCorreta}" min="0" max="3" placeholder="Ex: 1 (Se a Opção 1 for a certa)" required />
 
-            <!-- === INÍCIO DA ALTERAÇÃO: CAMPO DE NÍVEL DE DIFICULDADE === -->
             <div class="divider"></div>
             
             <label for="nivel">Nível de Dificuldade:</label>
@@ -43,9 +41,8 @@
                         th:text="${n} + ' (' + ${n.pontos} + ' pts)'">
                 </option>
             </select>
-            <!-- === FIM DA ALTERAÇÃO === -->
 
-            <button type="submit" class="btn btn-block">Salvar Pergunta</button>
+            <button type="submit" class="btn btn-block" th:text="${pergunta.id == null} ? 'Cadastrar Pergunta' : 'Atualizar Pergunta'"></button>
             
             <a th:href="@{/admin/corridas/{id}/perguntas(id=${corridaId})}" class="btn btn-secundario btn-block">Cancelar</a>
         </form>
