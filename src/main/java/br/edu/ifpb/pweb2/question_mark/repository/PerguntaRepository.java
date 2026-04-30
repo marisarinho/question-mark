@@ -9,4 +9,5 @@ import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
 public interface PerguntaRepository extends JpaRepository<Pergunta, Long> {
     
     List<Pergunta> findByCorridaId(Long corridaId);
+    
 }

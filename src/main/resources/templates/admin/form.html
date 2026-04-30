@@ -7,52 +7,38 @@
 </head>
 <body>
 
-
 <div class="page-wrapper">
     <div class="card">
         <h2>🏁 Nova Corrida</h2>
         <div class="divider"></div>
 
-
       <form th:action="${corrida.id == null} ? @{/admin/corridas/nova} : @{/admin/corridas/{id}/editar(id=${corrida.id})}"
       method="post"
       th:object="${corrida}">
 
-
             <input type="hidden" th:field="*{id}" />
 
-
-
-
-           
             <label for="titulo">Título da Corrida</label>
             <input type="text" th:field="*{titulo}" placeholder="Ex: Maratona de Algoritmos" required />
-
 
             <label for="descricao">Descrição</label>
             <input type="text" th:field="*{descricao}" placeholder="Descreva as regras da corrida" required />
 
-
             <label for="tempoSegundos">Tempo (em segundos)</label>
             <input type="number" th:field="*{tempoSegundos}" placeholder="Ex: 3600 (para 1 hora)" required />
 
-
-            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+            <label class="checkbox-container">
                 <input type="checkbox" th:field="*{ativa}" />
                 Corrida Ativa imediatamente?
             </label>
 
-
-            <button class="btn" type="submit">Salvar Corrida</button>
+            <button class="btn btn-block" type="submit">Salvar Corrida</button>
            
-            <a th:href="@{/admin/corridas}" class="btn" style="background-color: #666; margin-top: 10px; display: block; text-align: center;">Cancelar</a>
+            <a th:href="@{/admin/corridas}" class="btn btn-secundario btn-block">Cancelar</a>
         </form>
-
 
     </div>
 </div>
 
-
 </body>
 </html>
-

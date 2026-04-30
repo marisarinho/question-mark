@@ -3,6 +3,7 @@ package br.edu.ifpb.pweb2.question_mark.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import br.edu.ifpb.pweb2.question_mark.interceptor.AuthInteceptor;
@@ -19,5 +20,10 @@ public class WebConfig implements WebMvcConfigurer {
             .excludePathPatterns("/login","/css/**");
     }
 
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        // Redireciona qualquer requisição na raiz ("/") para "/login"
+        registry.addViewController("/").setViewName("redirect:/login");
+    }
 
 }
