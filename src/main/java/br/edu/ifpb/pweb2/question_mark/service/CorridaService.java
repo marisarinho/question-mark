@@ -1,5 +1,7 @@
 package br.edu.ifpb.pweb2.question_mark.service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,15 @@ public class CorridaService {
         return corridaRepository.findAll();
     }
 
+    public boolean tempoEstourado(Long corridaId, LocalDateTime inicioCorrida){
+            Corrida corridaEcontrada = this.findById(corridaId);
+            int tempoSegundos = corridaEcontrada.getTempoSegundos();
+            long segundosPassados = ChronoUnit.SECONDS.between(inicioCorrida, LocalDateTime.now());
+            if(segundosPassados>=tempoSegundos){
+                    return true;
+                }
+            return false;
 
-
+              
+}
 }

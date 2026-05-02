@@ -49,4 +49,14 @@ public class PerguntaService {
         return perguntaRepository.save(pergunta);
     
     }
+
+    public Pergunta getPerguntaPorIndice(Long corridaId, int indice){
+        List<Pergunta> lista_perguntas = findByCorridaId(corridaId);
+
+        for (int i = 0; i < lista_perguntas.size(); i++) {            
+            if (lista_perguntas.get(i).equals(indice))
+                return lista_perguntas.get(indice);
+        }
+        return null;
+    }
 }

@@ -3,8 +3,11 @@
 
 package br.edu.ifpb.pweb2.question_mark.controller;
 
+import br.edu.ifpb.pweb2.question_mark.service.PerguntaService;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
+import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.model.Participante;
+import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
 import br.edu.ifpb.pweb2.question_mark.service.CorridaService;
 import br.edu.ifpb.pweb2.question_mark.service.ResultadoService;
 import jakarta.servlet.http.HttpSession;
@@ -24,11 +28,20 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/home")
 public class LobbyController {
 
+    private final PerguntaService perguntaService;
+
+    private final PerguntaController perguntaController;
+
     @Autowired
     private CorridaService corridaService; 
 
     @Autowired
     ResultadoService resultadoService;
+
+    LobbyController(PerguntaController perguntaController, PerguntaService perguntaService) {
+        this.perguntaController = perguntaController;
+        this.perguntaService = perguntaService;
+    }
 
     @GetMapping()
         public String exibirLobby(HttpSession session, Model model) {
@@ -72,5 +85,30 @@ public class LobbyController {
                 return "redirect:/home/corrida/" + id + "/perguntas"; // tem que ser mesma url da exibição das perguntas
 
         }
+
+        @GetMapping("/corridas/{id}/pergunta")
+        public String corrida(@PathVariable Long id, HttpSession session, RedirectAttributes redirect){
+            Long corridaId = (Long) session.getAttribute("corridaId");
+            if (corridaId==null) {
+                    redirect.addFlashAttribute("mensagem", "Nenhuma corrida em andamento");
+                    return "redirect:/home";
+                }
+
+            LocalDateTime inicio = (LocalDateTime ) session.getAttribute("inicioCorrida");
+            if(corridaService.tempoEstourado(id, inicio)){
+                redirect.addFlashAttribute("mensagem","Tempo esgotado");
+                return "redirect:/corrida/" + id +"/resultado";
+            }
+            int indice = (int) session.getAttribute("indicePergunta");
+            Pergunta pergunta = perguntaService.getPerguntaPorIndice(corridaId, indice);
+            if(pergunta == null){
+                return "redirect:/corrida/" + id +"/resultado";
+            }
+            redirect.addAttribute("pergunta",pergunta);
+            return "redirect:/corrida/" + id +"/resultado";
+            
+
+        }
+        
         
     }
