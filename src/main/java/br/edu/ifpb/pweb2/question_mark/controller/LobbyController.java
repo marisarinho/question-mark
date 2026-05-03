@@ -87,7 +87,7 @@ public class LobbyController {
         }
 
         @GetMapping("/corridas/{id}/pergunta")
-        public String corrida(@PathVariable Long id, HttpSession session, RedirectAttributes redirect){
+        public String corrida(@PathVariable Long id, HttpSession session,Model model, RedirectAttributes redirect){
             Long corridaId = (Long) session.getAttribute("corridaId");
             if (corridaId==null) {
                     redirect.addFlashAttribute("mensagem", "Nenhuma corrida em andamento");
@@ -104,8 +104,16 @@ public class LobbyController {
             if(pergunta == null){
                 return "redirect:/corrida/" + id +"/resultado";
             }
-            redirect.addAttribute("pergunta",pergunta);
-            return "redirect:/corrida/" + id +"/resultado";
+            Integer tempoSegundos = corridaService.tempoSegundos(corridaId);
+            int totalPerguntas = perguntaService.contarPerguntasPorCorrida(corridaId);
+            
+            model.addAttribute("corridaId", corridaId);
+            model.addAttribute("pergunta", pergunta);
+            model.addAttribute("tempoRestante", tempoSegundos);
+            model.addAttribute("indicePergunta", indice);
+            model.addAttribute("totalPerguntas", totalPerguntas);
+
+            return "home/pergunta";// nao fiz a view ainda
             
 
         }

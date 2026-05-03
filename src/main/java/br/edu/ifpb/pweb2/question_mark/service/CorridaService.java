@@ -63,7 +63,11 @@ public class CorridaService {
                     return true;
                 }
             return false;
+        }
+    public Integer tempoSegundos(Long corridaId){
+        Corrida corrida = findById(corridaId);
+        return corrida.getTempoSegundos();
 
-              
-}
+    }
+  
 }

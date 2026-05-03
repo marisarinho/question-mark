@@ -59,4 +59,10 @@ public class PerguntaService {
         }
         return null;
     }
+
+    public int contarPerguntasPorCorrida(Long corridaId){
+        List<Pergunta> lista_perguntas = findByCorridaId(corridaId);
+        return lista_perguntas.size();
+    }
+    
 }
