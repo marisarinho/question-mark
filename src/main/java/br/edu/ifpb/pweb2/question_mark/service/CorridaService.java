@@ -59,10 +59,7 @@ public class CorridaService {
             Corrida corridaEcontrada = this.findById(corridaId);
             int tempoSegundos = corridaEcontrada.getTempoSegundos();
             long segundosPassados = ChronoUnit.SECONDS.between(inicioCorrida, LocalDateTime.now());
-            if(segundosPassados>=tempoSegundos){
-                    return true;
-                }
-            return false;
+            return segundosPassados>=tempoSegundos;
         }
     public Integer tempoSegundos(Long corridaId){
         Corrida corrida = findById(corridaId);
