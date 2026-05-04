@@ -5,11 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
-import br.edu.ifpb.pweb2.question_mark.repository.CorridaRepository;
 import br.edu.ifpb.pweb2.question_mark.repository.PerguntaRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class PerguntaService {
@@ -52,4 +49,20 @@ public class PerguntaService {
         return perguntaRepository.save(pergunta);
     
     }
+
+    public Pergunta getPerguntaPorIndice(Long corridaId, int indice){
+        List<Pergunta> lista_perguntas = findByCorridaId(corridaId);
+
+        for (int i = 0; i < lista_perguntas.size(); i++) {            
+            if (lista_perguntas.get(i).equals(indice))
+                return lista_perguntas.get(indice);
+        }
+        return null;
+    }
+
+    public int contarPerguntasPorCorrida(Long corridaId){
+        List<Pergunta> lista_perguntas = findByCorridaId(corridaId);
+        return lista_perguntas.size();
+    }
+    
 }

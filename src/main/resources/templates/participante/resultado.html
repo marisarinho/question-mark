@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado da Corrida</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="card" style="text-align: center;">
+        
+        <h1 style="color: #4CAF50; font-size: 2.5em; margin-bottom: 10px;">Corrida Finalizada! 🏁</h1>
+        <p style="font-size: 1.2em; color: #555;">Sua pontuação final foi:</p>
+        
+        <div style="font-size: 4em; font-weight: bold; color: #333; margin: 20px 0;">
+            <span th:text="${pontosFinais}">0</span> pts
+        </div>
+
+        <div class="divider"></div>
+
+        <div style="margin-top: 20px; display: flex; justify-content: center; gap: 15px;">
+            <a th:href="@{/home}" class="btn" style="background-color: #6c757d;">🏠 Voltar ao Lobby</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
