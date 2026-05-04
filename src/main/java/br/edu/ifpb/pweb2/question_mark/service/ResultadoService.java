@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.model.Participante;
+import br.edu.ifpb.pweb2.question_mark.model.Resultado;
 import br.edu.ifpb.pweb2.question_mark.repository.ResultadoRepository;
 
 @Service
@@ -21,5 +22,10 @@ public class ResultadoService {
         return resultadoRepository.existsByParticipanteAndCorrida(participante,corrida);
 
 
+    }
+
+    public Resultado save(Resultado resultado) {
+        return resultadoRepository.save(resultado);
+   
     }
 }
