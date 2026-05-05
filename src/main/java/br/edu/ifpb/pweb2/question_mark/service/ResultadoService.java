@@ -1,5 +1,7 @@
 package br.edu.ifpb.pweb2.question_mark.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +29,13 @@ public class ResultadoService {
     public Resultado save(Resultado resultado) {
         return resultadoRepository.save(resultado);
    
+    }
+
+    public List<Resultado> rankingGeral(){
+        return resultadoRepository.findAllByOrderByPontuacaoDesc();
+    }
+
+    public boolean participanteTemResultado(Participante participante){
+        return resultadoRepository.existsByParticipante(participante);
     }
 }

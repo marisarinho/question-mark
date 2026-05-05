@@ -396,3 +396,23 @@ form button[type="submit"] {
     background-color: #21867a;
     box-shadow: 0 4px 12px rgba(42, 157, 143, 0.35);
 }
+
+
+.destaque {
+    background-color: #fff3cd;
+    font-weight: bold;
+}
+
+.tabela-ranking {
+    width: 100%;
+    margin: 0 auto;
+
+    border-collapse: collapse;
+}
+
+.tabela-ranking th, .tabela-ranking td {
+    padding: 10px;
+    border: 1px solid #ccc;
+
+    text-align: left;
+}

@@ -32,6 +32,8 @@ public class CorridaParticipanteController {
     @Autowired
     private ResultadoService resultadoService; 
 
+
+
     @GetMapping("/{id}/iniciar")
     public String iniciar(@PathVariable Long id, HttpSession session) {
         Corrida corrida = corridaService.findById(id);
@@ -39,6 +41,8 @@ public class CorridaParticipanteController {
         session.setAttribute("inicioCorrida", LocalDateTime.now());
         session.setAttribute("indicePergunta", 0);
         session.setAttribute("pontuacaoAtual", 0);
+
+        
         return "redirect:/corridas/" + id + "/pergunta";
     }
 
@@ -138,4 +142,17 @@ public class CorridaParticipanteController {
     public String exibirResultadoIndividual() {
         return "participante/resultado";
     }
+
+
+    @GetMapping("/ranking")
+    public String exibirRanking( HttpSession session, Model model) {
+        List<Resultado> ranking = resultadoService.rankingGeral();
+        Participante participante = (Participante) session.getAttribute("participanteLogado");
+        Boolean resultado = resultadoService.participanteTemResultado(participante);
+        model.addAttribute("ranking",ranking);
+        model.addAttribute("participanteLogado",participante);
+        model.addAttribute("temResultado", resultado);
+        return "participante/ranking";
+    }
+    
 }

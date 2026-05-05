@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ranking Geral - Question Mark</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <h2 class="titulo-pagina">🏆 Ranking Geral</h2>
+
+<div class="page-wrapper">
+
+    <div th:if="${#lists.isEmpty(ranking)}" class="empty-state">
+        <p>Nenhum resultado cadastrado ainda.</p>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(ranking)}">
+
+        <div th:unless="${temResultado}" class="alert-info">
+            <p>Você ainda não participou de nenhuma corrida!</p>
+        </div>
+
+        <table class="tabela-ranking">
+            <thead>
+                <tr >
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Corrida</th>
+                    <th>Pontuação</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="resultado, resultadoStat : ${ranking}"
+                    th:class="${resultado.participante.id == participanteLogado.id} ? 'destaque' : ''">
+                    <td th:text="${resultadoStat.index + 1}"></td>
+                    <td th:text="${resultado.participante.nome}"></td>
+                    <td th:text="${resultado.corrida.titulo}"></td>
+                    <td th:text="${resultado.pontuacao}"></td>
+                    <td th:text="${#temporals.format(resultado.dataHora, 'dd/MM/yyyy HH:mm')}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <a th:href="@{/home}" class="btn btn-secundario">⬅ Voltar ao Lobby</a>
+
+</div>
+
+</body>
+</html>
