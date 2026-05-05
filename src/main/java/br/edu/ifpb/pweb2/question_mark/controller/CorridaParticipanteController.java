@@ -35,8 +35,15 @@ public class CorridaParticipanteController {
 
 
     @GetMapping("/{id}/iniciar")
-    public String iniciar(@PathVariable Long id, HttpSession session) {
+    public String iniciar(@PathVariable Long id, HttpSession session, RedirectAttributes redirect) {
         Corrida corrida = corridaService.findById(id);
+        Participante participante = (Participante) session.getAttribute("participanteLogado");
+
+         if(resultadoService.existsByParticipanteAndCorrida(participante,corrida )){
+                redirect.addFlashAttribute("mensagem","Participante ja jogou essa corrida");
+                return "redirect:/home";
+            };
+                
         session.setAttribute("corridaId", id);
         session.setAttribute("inicioCorrida", LocalDateTime.now());
         session.setAttribute("indicePergunta", 0);
