@@ -3,11 +3,8 @@
 
 package br.edu.ifpb.pweb2.question_mark.controller;
 
-import br.edu.ifpb.pweb2.question_mark.service.PerguntaService;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
-import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +17,7 @@ import br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.model.Participante;
 import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
 import br.edu.ifpb.pweb2.question_mark.service.CorridaService;
+import br.edu.ifpb.pweb2.question_mark.service.PerguntaService;
 import br.edu.ifpb.pweb2.question_mark.service.ResultadoService;
 import jakarta.servlet.http.HttpSession;
 
@@ -86,7 +84,7 @@ public class LobbyController {
 
         }
 
-        @GetMapping("/corridas/{id}/pergunta")
+    @GetMapping("/corridas/{id}/pergunta")
         public String corrida(@PathVariable Long id, HttpSession session,Model model, RedirectAttributes redirect){
             Long corridaId = (Long) session.getAttribute("corridaId");
             if (corridaId==null) {
@@ -106,7 +104,7 @@ public class LobbyController {
             }
             Integer tempoSegundos = corridaService.tempoSegundos(corridaId);
             int totalPerguntas = perguntaService.contarPerguntasPorCorrida(corridaId);
-            
+
             model.addAttribute("corridaId", corridaId);
             model.addAttribute("pergunta", pergunta);
             model.addAttribute("tempoRestante", tempoSegundos);
