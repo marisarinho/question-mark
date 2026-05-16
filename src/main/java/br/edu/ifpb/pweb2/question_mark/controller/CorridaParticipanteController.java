@@ -32,25 +32,7 @@ public class CorridaParticipanteController {
     @Autowired
     private ResultadoService resultadoService; 
 
-    @GetMapping()
-        public String exibirListaCorridas(HttpSession session, Model model) {
-            
-            Participante participante = (Participante) session.getAttribute("participanteLogado");
-            
-            
-            if (participante == null) {
-                return "redirect:/login"; 
-            }
 
-            
-            model.addAttribute("nomeParticipante", participante.getNome());
-
-            
-            model.addAttribute("corridasAtivas", corridaService.findByAtivas(true));
-
-        
-            return "home"; 
-        }
 
     @GetMapping("/{id}/iniciar")
     public String iniciar(@PathVariable Long id, HttpSession session, RedirectAttributes redirect) {
@@ -157,7 +139,7 @@ public class CorridaParticipanteController {
         session.removeAttribute("corridaId");
         
         redirectAttributes.addFlashAttribute("pontosFinais", pontos);
-        
+        redirectAttributes.addFlashAttribute("corridaId", corridaId);
         redirectAttributes.addFlashAttribute("mensagemFinal", mensagem); 
         
         return "redirect:/corridas/resultado"; 
@@ -169,15 +151,27 @@ public class CorridaParticipanteController {
     }
 
 
-    @GetMapping("/ranking")
-    public String exibirRanking( HttpSession session, Model model) {
+   @GetMapping("/ranking")
+    public String exibirRanking(HttpSession session, Model model) {
         List<Resultado> ranking = resultadoService.rankingGeral();
         Participante participante = (Participante) session.getAttribute("participanteLogado");
-        Boolean resultado = resultadoService.participanteTemResultado(participante);
-        model.addAttribute("ranking",ranking);
-        model.addAttribute("participanteLogado",participante);
-        model.addAttribute("temResultado", resultado);
+        Boolean temResultado = resultadoService.participanteTemResultado(participante);
+        model.addAttribute("ranking", ranking);
+        model.addAttribute("participanteLogado", participante);
+        model.addAttribute("temResultado", temResultado);
         return "participante/ranking";
     }
-    
+
+    @GetMapping("/{id}/ranking")
+    public String exibirRankingPorCorrida(@PathVariable Long id, HttpSession session, Model model) {
+        Corrida corrida = corridaService.findById(id);
+        Participante participante = (Participante) session.getAttribute("participanteLogado");
+        List<Resultado> ranking = resultadoService.rankingCorrida(id);
+        Boolean temResultado = resultadoService.existsByParticipanteAndCorrida(participante, corrida);
+        model.addAttribute("ranking", ranking);
+        model.addAttribute("participanteLogado", participante);
+        model.addAttribute("temResultado", temResultado);
+        model.addAttribute("corrida", corrida);
+        return "participante/rankingCorrida";
+    }
 }

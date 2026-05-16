@@ -26,9 +26,7 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/home")
 public class LobbyController {
 
-    private final PerguntaService perguntaService;
 
-    private final PerguntaController perguntaController;
 
     @Autowired
     private CorridaService corridaService; 
@@ -36,11 +34,7 @@ public class LobbyController {
     @Autowired
     ResultadoService resultadoService;
 
-    LobbyController(PerguntaController perguntaController, PerguntaService perguntaService) {
-        this.perguntaController = perguntaController;
-        this.perguntaService = perguntaService;
-    }
-
+    
     @GetMapping()
         public String exibirLobby(HttpSession session, Model model) {
             
@@ -61,60 +55,5 @@ public class LobbyController {
             return "home"; 
         }
 
-    @GetMapping("/corridas/{id}/iniciar")
-        public String iniciarCorrida(@PathVariable Long id, HttpSession session, RedirectAttributes redirect) {
-            Participante participante = (Participante) session.getAttribute("participanteLogado");
-            Corrida corrida = corridaService.findById(id);
-
-            if (session.getAttribute("corridaId")!=null) {
-                    redirect.addFlashAttribute("mensagem", "corrida em andamento");
-                    return "redirect:/home";
-                }
-
-            if(resultadoService.existsByParticipanteAndCorrida(participante,corrida )){
-                redirect.addFlashAttribute("mensagem","Participante ja jogou essa corrida");
-                return "redirect:/home";
-            };
-                
-                session.setAttribute("corridaId", id);
-                session.setAttribute("indicePergunta",0);
-                session.setAttribute("pontoAtual",0);
-                session.setAttribute("inicioCorrida", LocalDateTime.now());
-                return "redirect:/home/corrida/" + id + "/perguntas"; // tem que ser mesma url da exibição das perguntas
-
-        }
-
-    @GetMapping("/corridas/{id}/pergunta")
-        public String corrida(@PathVariable Long id, HttpSession session,Model model, RedirectAttributes redirect){
-            Long corridaId = (Long) session.getAttribute("corridaId");
-            if (corridaId==null) {
-                    redirect.addFlashAttribute("mensagem", "Nenhuma corrida em andamento");
-                    return "redirect:/home";
-                }
-
-            LocalDateTime inicio = (LocalDateTime ) session.getAttribute("inicioCorrida");
-            if(corridaService.tempoEstourado(id, inicio)){
-                redirect.addFlashAttribute("mensagem","Tempo esgotado");
-                return "redirect:/corrida/" + id +"/resultado";
-            }
-            int indice = (int) session.getAttribute("indicePergunta");
-            Pergunta pergunta = perguntaService.getPerguntaPorIndice(corridaId, indice);
-            if(pergunta == null){
-                return "redirect:/corrida/" + id +"/resultado";
-            }
-            Integer tempoSegundos = corridaService.tempoSegundos(corridaId);
-            int totalPerguntas = perguntaService.contarPerguntasPorCorrida(corridaId);
-
-            model.addAttribute("corridaId", corridaId);
-            model.addAttribute("pergunta", pergunta);
-            model.addAttribute("tempoRestante", tempoSegundos);
-            model.addAttribute("indicePergunta", indice);
-            model.addAttribute("totalPerguntas", totalPerguntas);
-
-            return "home/pergunta";// nao fiz a view ainda
-            
-
-        }
-        
         
     }

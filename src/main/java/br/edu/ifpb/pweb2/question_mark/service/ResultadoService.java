@@ -16,6 +16,9 @@ public class ResultadoService {
     @Autowired
     ResultadoRepository resultadoRepository;
 
+    @Autowired
+    private CorridaService corridaService;
+
     public boolean existsById(Long id){
         return resultadoRepository.existsById(id);
     }
@@ -33,6 +36,11 @@ public class ResultadoService {
 
     public List<Resultado> rankingGeral(){
         return resultadoRepository.findAllByOrderByPontuacaoDesc();
+    }
+
+    public List<Resultado> rankingCorrida(Long id){
+        Corrida corrida = corridaService.findById(id);
+        return resultadoRepository.findByCorridaOrderByPontuacaoDesc(corrida);
     }
 
     public boolean participanteTemResultado(Participante participante){
