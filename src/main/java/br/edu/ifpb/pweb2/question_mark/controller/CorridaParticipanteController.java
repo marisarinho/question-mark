@@ -32,6 +32,26 @@ public class CorridaParticipanteController {
     @Autowired
     private ResultadoService resultadoService; 
 
+    @GetMapping()
+        public String exibirListaCorridas(HttpSession session, Model model) {
+            
+            Participante participante = (Participante) session.getAttribute("participanteLogado");
+            
+            
+            if (participante == null) {
+                return "redirect:/login"; 
+            }
+
+            
+            model.addAttribute("nomeParticipante", participante.getNome());
+
+            
+            model.addAttribute("corridasAtivas", corridaService.findByAtivas(true));
+
+        
+            return "home"; 
+        }
+
     @GetMapping("/{id}/iniciar")
     public String iniciar(@PathVariable Long id, HttpSession session) {
         Corrida corrida = corridaService.findById(id);
