@@ -30,15 +30,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public String formLogin(@RequestParam String nome, 
-                            @RequestParam String email, 
                             HttpSession session, 
                             RedirectAttributes redirect) {
 
-        Participante participante = ParticipanteService.logarParticipante(nome,email);
+        Participante participante = ParticipanteService.logarParticipante(nome);
 
         session.setAttribute("participanteLogado", participante);
 
-        redirect.addFlashAttribute("Mensagem","Usuario Logado com sucesso");
+        redirect.addFlashAttribute("mensagem","Usuario Logado com sucesso");
 
         if (participante.getAdmin()) {  
             return "redirect:/admin/corridas";
