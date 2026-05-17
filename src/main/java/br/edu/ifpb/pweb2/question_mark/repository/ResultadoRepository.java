@@ -15,4 +15,5 @@ public interface ResultadoRepository extends JpaRepository<Resultado, Long>{
     List<Resultado> findAllByOrderByPontuacaoDesc();
     boolean existsByParticipante(Participante participante);
     List<Resultado> findByCorridaOrderByPontuacaoDesc(Corrida corrida);
+    
 }

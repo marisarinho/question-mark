@@ -19,6 +19,7 @@ import br.edu.ifpb.pweb2.question_mark.model.Participante;
 import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
 import br.edu.ifpb.pweb2.question_mark.model.Resultado;
 import br.edu.ifpb.pweb2.question_mark.service.CorridaService;
+import br.edu.ifpb.pweb2.question_mark.service.PerguntaService;
 import br.edu.ifpb.pweb2.question_mark.service.ResultadoService;
 import jakarta.servlet.http.HttpSession;
 
@@ -32,6 +33,8 @@ public class CorridaParticipanteController {
     @Autowired
     private ResultadoService resultadoService; 
 
+    @Autowired 
+    private PerguntaService perguntaService;
 
 
     @GetMapping("/{id}/iniciar")
@@ -88,8 +91,9 @@ public class CorridaParticipanteController {
     public String processarResposta(@PathVariable Long id, 
                                    @RequestParam Integer resposta, 
                                    HttpSession session, 
-                                   RedirectAttributes redirect) { // Já tínhamos o redirect aqui!
+                                   RedirectAttributes redirect) { 
         
+        Long corridaId = (Long) session.getAttribute("corridaId");
         Integer indice = (Integer) session.getAttribute("indicePergunta");
         LocalDateTime inicio = (LocalDateTime) session.getAttribute("inicioCorrida");
 
@@ -98,24 +102,43 @@ public class CorridaParticipanteController {
             return finalizarCorrida(session, "Tempo esgotado!", redirect);
         }
 
-        Corrida corrida = corridaService.findById(id);
-        Pergunta perguntaAtual = corrida.getPerguntas().get(indice);
+        Pergunta perguntaAtual = perguntaService.getPerguntaPorIndice(corridaId,indice);
 
-        if (resposta.equals(perguntaAtual.getRespostaCorreta())) {
-            Integer pontosAtuais = (Integer) session.getAttribute("pontuacaoAtual");
-            session.setAttribute("pontuacaoAtual", pontosAtuais + perguntaAtual.getNivel().getPontos());
-        }
-        
-        indice++;
-        session.setAttribute("indicePergunta", indice);
 
-        if (indice >= corrida.getPerguntas().size()) {
-          
+        if (perguntaAtual==null) {
             return finalizarCorrida(session, "Você terminou a corrida!", redirect);
+        }
+
+      boolean acertou = perguntaService.verificarResposta(perguntaAtual, resposta);
+
+    if (acertou) {
+            Integer pontosAtuais = (Integer) session.getAttribute("pontuacaoAtual");
+            session.setAttribute("pontuacaoAtual", perguntaService.calcularPontos(perguntaAtual, pontosAtuais));
+            redirect.addFlashAttribute("acertou", true);
+        } else {
+            redirect.addFlashAttribute("acertou", false);
+            redirect.addFlashAttribute("respostaCorreta", perguntaService.getTextoRespostaCorreta(perguntaAtual));
         }
 
         return "redirect:/corridas/" + id + "/pergunta";
     }
+
+   @PostMapping("/{id}/pergunta/proxima")
+        public String proxima(@PathVariable Long id, HttpSession session, RedirectAttributes redirect) {
+            Long corridaId = (Long) session.getAttribute("corridaId");
+            Integer indice = (Integer) session.getAttribute("indicePergunta");
+            indice++;
+            session.setAttribute("indicePergunta", indice);
+
+            Pergunta perguntaAtual = perguntaService.getPerguntaPorIndice(corridaId, indice);
+
+            if (perguntaAtual == null) {
+                return finalizarCorrida(session, "Você terminou a corrida!", redirect);
+            }
+
+            return "redirect:/corridas/" + id + "/pergunta";
+        }
+
 
     private String finalizarCorrida(HttpSession session, String mensagem, RedirectAttributes redirectAttributes) {
         Long corridaId = (Long) session.getAttribute("corridaId");

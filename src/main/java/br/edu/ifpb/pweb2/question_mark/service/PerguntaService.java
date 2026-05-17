@@ -50,19 +50,28 @@ public class PerguntaService {
     
     }
 
-    public Pergunta getPerguntaPorIndice(Long corridaId, int indice){
+    public Pergunta getPerguntaPorIndice(Long corridaId, int indice) {
         List<Pergunta> lista_perguntas = findByCorridaId(corridaId);
-
-        for (int i = 0; i < lista_perguntas.size(); i++) {            
-            if (lista_perguntas.get(i).equals(indice))
-                return lista_perguntas.get(indice);
+        if (indice >= lista_perguntas.size()) {
+            return null;
         }
-        return null;
+        return lista_perguntas.get(indice);
     }
-
     public int contarPerguntasPorCorrida(Long corridaId){
         List<Pergunta> lista_perguntas = findByCorridaId(corridaId);
         return lista_perguntas.size();
     }
     
+    public boolean verificarResposta(Pergunta pergunta, Integer resposta){
+        return resposta.equals(pergunta.getRespostaCorreta());
+
+    }
+
+    public Integer calcularPontos(Pergunta pergunta, Integer pontosAtuais){
+        return pontosAtuais + pergunta.getNivel().getPontos();
+    }
+
+    public String getTextoRespostaCorreta(Pergunta pergunta) {
+        return pergunta.getAlternativas().get(pergunta.getRespostaCorreta());
+    }
 }
