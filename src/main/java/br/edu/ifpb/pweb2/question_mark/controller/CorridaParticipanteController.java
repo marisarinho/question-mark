@@ -56,36 +56,33 @@ public class CorridaParticipanteController {
         return "redirect:/corridas/" + id + "/pergunta";
     }
 
-    @GetMapping("/{id}/pergunta")
- 
-    public String exibirPergunta(@PathVariable Long id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        Integer indice = (Integer) session.getAttribute("indicePergunta");
-        LocalDateTime inicio = (LocalDateTime) session.getAttribute("inicioCorrida");
-
-        if (indice == null || corridaService.tempoEstourado(id, inicio)) {
         
-            return finalizarCorrida(session, "Tempo esgotado!", redirectAttributes);
+    @GetMapping("/{id}/pergunta")
+        public String exibirPergunta(@PathVariable Long id, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+            Long corridaId = (Long) session.getAttribute("corridaId");
+            Integer indice = (Integer) session.getAttribute("indicePergunta");
+            LocalDateTime inicio = (LocalDateTime) session.getAttribute("inicioCorrida");
+
+            if (indice == null || corridaService.tempoEstourado(corridaId, inicio)) {
+                return finalizarCorrida(session, "Tempo esgotado!", redirectAttributes);
+            }
+
+            Pergunta pergunta = perguntaService.getPerguntaPorIndice(corridaId, indice);
+
+            if (pergunta == null) {
+                return finalizarCorrida(session, "Corrida concluída!", redirectAttributes);
+            }
+
+            int totalPerguntas = perguntaService.contarPerguntasPorCorrida(corridaId);
+
+            model.addAttribute("pergunta", pergunta);
+            model.addAttribute("totalPerguntas", totalPerguntas);
+            model.addAttribute("indiceAtual", indice + 1);
+            model.addAttribute("tempoRestante", corridaService.tempoSegundos(corridaId));
+            model.addAttribute("corridaId", corridaId);
+
+            return "participante/pergunta";
         }
-
-        Corrida corrida = corridaService.findById(id);
-        List<Pergunta> perguntas = corrida.getPerguntas();
-
-        if (indice >= perguntas.size()) {
-           
-            return finalizarCorrida(session, "Corrida concluída!", redirectAttributes);
-        }
-
-        model.addAttribute("pergunta", perguntas.get(indice));
-        model.addAttribute("totalPerguntas", perguntas.size());
-        model.addAttribute("indiceAtual", indice + 1);
-        long segundosPassados = java.time.temporal.ChronoUnit.SECONDS.between(inicio, LocalDateTime.now());
-        long tempoRestante = corrida.getTempoSegundos() - segundosPassados;
-        model.addAttribute("tempoRestante", tempoRestante);
-
-        model.addAttribute("corridaId", id);
-
-        return "participante/pergunta";
-    }
 
     @PostMapping("/{id}/pergunta")
     public String processarResposta(@PathVariable Long id, 
@@ -148,12 +145,7 @@ public class CorridaParticipanteController {
         if (pontos == null) pontos = 0;
 
         if (participante != null && corridaId != null) {
-            Resultado res = new Resultado();
-            res.setParticipante(participante);
-            res.setCorrida(corridaService.findById(corridaId));
-            res.setPontuacao(new BigDecimal(pontos));
-            res.setDataHora(LocalDateTime.now());
-            resultadoService.save(res);
+            resultadoService.salvarResultado(participante, corridaId, pontos);
         }
 
         session.removeAttribute("indicePergunta");

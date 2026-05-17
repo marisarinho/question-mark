@@ -37,12 +37,5 @@ public class Pergunta {
     @ManyToOne
     @JoinColumn(name = "corrida_id")
     private Corrida corrida;
-//provisorio
-    public Integer getRespostaCorreta() {
-        return this.respostaCorreta;
-    }
 
-    public NivelDificuldade getNivel() {
-        return this.nivel;
-    }
 }
