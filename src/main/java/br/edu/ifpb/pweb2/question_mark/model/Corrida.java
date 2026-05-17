@@ -1,12 +1,12 @@
 package br.edu.ifpb.pweb2.question_mark.model;
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,6 +27,6 @@ public class Corrida {
     @OneToMany(mappedBy = "corrida", cascade = CascadeType.ALL)
     private List<Pergunta> perguntas;
 
-    @ManyToMany(mappedBy = "corridasFeitas")
-    private List<Participante> participantes;
+    @OneToMany(mappedBy = "corrida", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Resultado> resultados;
 }

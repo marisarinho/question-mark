@@ -7,5 +7,5 @@ import br.edu.ifpb.pweb2.question_mark.model.Participante;
 
 @Repository
 public interface ParticipanteRepository extends JpaRepository<Participante,Long>{
-    public Participante findByEmail(String email);
+    public Participante findByNome(String nome);
 }

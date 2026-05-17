@@ -27,6 +27,10 @@
             <a th:href="@{/corridas/ranking}" class="btn" style="background-color: #6c757d;"> Ranking Geral</a>
         </div>
 
+        <div style="margin-top: 20px; display: flex; justify-content: center; gap: 15px;">
+            <a th:href="@{/corridas/{id}/ranking(id=${corridaId})}" class="btn">🏆 Ranking da Corrida</a>        
+        </div>
+
     </div>
 </div>
 

@@ -1,5 +1,7 @@
 package br.edu.ifpb.pweb2.question_mark.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ public class ResultadoService {
 
     @Autowired
     ResultadoRepository resultadoRepository;
+
+    @Autowired
+    private CorridaService corridaService;
 
     public boolean existsById(Long id){
         return resultadoRepository.existsById(id);
@@ -35,7 +40,22 @@ public class ResultadoService {
         return resultadoRepository.findAllByOrderByPontuacaoDesc();
     }
 
+    public List<Resultado> rankingCorrida(Long id){
+        Corrida corrida = corridaService.findById(id);
+        return resultadoRepository.findByCorridaOrderByPontuacaoDesc(corrida);
+    }
+
     public boolean participanteTemResultado(Participante participante){
         return resultadoRepository.existsByParticipante(participante);
     }
+
+    public void salvarResultado(Participante participante, Long id, Integer pontos) {
+            Corrida corrida = corridaService.findById(id);
+            Resultado res = new Resultado();
+            res.setParticipante(participante);
+            res.setCorrida(corrida);
+            res.setPontuacao(new BigDecimal(pontos));
+            res.setDataHora(LocalDateTime.now());
+            resultadoRepository.save(res);
+        }
 }

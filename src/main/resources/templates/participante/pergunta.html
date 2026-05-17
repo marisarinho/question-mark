@@ -13,26 +13,36 @@
             <h3 th:text="'Pergunta ' + ${indiceAtual} + ' de ' + ${totalPerguntas}"></h3>
             <div id="timer" style="font-weight: bold; color: #d9534f; font-size: 1.2em;">--:--</div>
         </div>
-        
+
         <div class="divider"></div>
 
         <h2 th:text="${pergunta.enunciado}"></h2>
 
-        <form th:action="@{/corridas/{id}/pergunta(id=${pergunta.corrida.id})}" method="post">
+        <!-- Formulário de resposta: só aparece se ainda não respondeu -->
+        <form th:if="${acertou == null}" th:action="@{/corridas/{id}/pergunta(id=${pergunta.corrida.id})}" method="post">
             <div th:each="alt, stat : ${pergunta.alternativas}" style="margin-bottom: 10px;">
                 <label class="card-detalhes" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 1px solid #eee; border-radius: 5px;">
                     <input type="radio" name="resposta" th:value="${stat.index}" required />
                     <span th:text="${alt}"></span>
                 </label>
             </div>
-
-            <button type="submit" class="btn" style="margin-top: 20px;">Próxima Pergunta ➡</button>
+            <button type="submit" class="btn" style="margin-top: 20px;">Responder ✅</button>
         </form>
+
+        <!-- Feedback: só aparece após responder -->
+        <div th:if="${acertou != null}">
+            <p th:if="${acertou}" style="color:green; font-size: 1.3em;">✅ Você acertou!</p>
+            <p th:unless="${acertou}" style="color:red; font-size: 1.3em;">❌ Errou! A resposta correta era: <b th:text="${respostaCorreta}"></b></p>
+
+            <form th:action="@{/corridas/{id}/pergunta/proxima(id=${pergunta.corrida.id})}" method="post">
+                <button type="submit" class="btn" style="margin-top: 20px;">Próxima Pergunta ➡</button>
+            </form>
+        </div>
+
     </div>
 </div>
 
 <script th:inline="javascript">
-    //pegando direto do controllere
     let restante = [[${tempoRestante}]];
     
     function atualizarTimer() {

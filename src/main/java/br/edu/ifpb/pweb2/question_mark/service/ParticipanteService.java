@@ -13,12 +13,12 @@ public class ParticipanteService {
     @Autowired
     ParticipanteRepository participanteRepository;
 
-    public Participante logarParticipante(String nome, String email){
-        Participante participanteEncontrado = participanteRepository.findByEmail(email);
+    public Participante logarParticipante(String nome){
+        Participante participanteEncontrado = participanteRepository.findByNome(nome);
         if (participanteEncontrado==null){
             participanteEncontrado = new Participante();
             participanteEncontrado.setNome(nome);
-            participanteEncontrado.setEmail(email);
+
             participanteEncontrado.setAdmin(false); 
             participanteRepository.save(participanteEncontrado);
         }

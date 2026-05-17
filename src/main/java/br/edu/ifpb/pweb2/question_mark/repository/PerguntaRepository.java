@@ -12,4 +12,5 @@ public interface PerguntaRepository extends JpaRepository<Pergunta, Long> {
     
     List<Pergunta> findByCorridaId(Long corridaId);
     
+    
 }

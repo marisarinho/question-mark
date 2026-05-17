@@ -21,16 +21,21 @@
             <div class="divider"></div>
             
             <label>Alternativas (Preencha as 4 opções):</label>
-            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[0]}" placeholder="Opção 0 (Ex: Buenos Aires)" required />
-            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[1]}" placeholder="Opção 1 (Ex: Brasília)" required />
-            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[2]}" placeholder="Opção 2 (Ex: Rio de Janeiro)" required />
-            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[3]}" placeholder="Opção 3 (Ex: São Paulo)" required />
+            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[0]}" placeholder="Opção 1 (Ex: Buenos Aires)" required />
+            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[1]}" placeholder="Opção 2 (Ex: Brasília)" required />
+            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[2]}" placeholder="Opção 3 (Ex: Rio de Janeiro)" required />
+            <input type="text" name="alternativas" th:value="${pergunta.alternativas != null} ? ${pergunta.alternativas[3]}" placeholder="Opção 4 (Ex: São Paulo)" required />
 
             <div class="divider"></div>
 
-            <label for="respostaCorreta">Índice da Resposta Correta (0 a 3):</label>
-            <input type="number" id="respostaCorreta" th:field="*{respostaCorreta}" min="0" max="3" placeholder="Ex: 1 (Se a Opção 1 for a certa)" required />
-
+            <label for="respostaCorreta">Índice da Resposta Correta :</label>
+                <select id="respostaCorreta" th:field="*{respostaCorreta}" required>
+                    <option value="" disabled selected>Selecione a alternativa correta</option>
+                    <option value="0">Opção 1</option>
+                    <option value="1">Opção 2</option>
+                    <option value="2">Opção 3</option>
+                    <option value="3">Opção 4</option>
+                </select>
             <div class="divider"></div>
             
             <label for="nivel">Nível de Dificuldade:</label>

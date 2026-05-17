@@ -63,10 +63,10 @@ public class CorridaController {
         return "redirect:/admin/corridas";
     }
 
-    @PostMapping("{id}/deletar")
+    @PostMapping("/{id}/deletar")
     public String excluirCorrida(@PathVariable Long id,RedirectAttributes redirect){
         corridaService.deletarCorrida(id);
-        redirect.addFlashAttribute("Mensagem","Corrida excluida com sucesso");
+        redirect.addFlashAttribute("mensagem","Corrida excluida com sucesso");
 
         return "redirect:/admin/corridas";
     }

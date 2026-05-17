@@ -7,7 +7,7 @@
 </head>
 <body>
 <div th:if="${mensagem}" class="alert-success" th:text="${mensagem}"></div>
-<a th:href="@{corridas/ranking}" class="btn">🏆 Ver Ranking</a>
+<a th:href="@{/corridas/ranking}" class="btn">🏆 Ver Ranking</a>
     <div class="lobby-header">
         <h1 class="titulo-pagina" style="margin-bottom: 5px;">🏁 Lobby de Corridas</h1>
         <h2 class="subtitulo">Olá, <span th:text="${nomeParticipante}"></span>! Preparado para o desafio?</h2>
@@ -33,6 +33,9 @@
                 <a th:href="@{/corridas/{id}/iniciar(id=${corrida.id})}" class="btn btn-sucesso btn-block">🚀 Iniciar Corrida</a>
             </div>
             
+             <div style="margin-top: 20px; display: flex; justify-content: center; gap: 15px;">
+                <a th:href="@{/corridas/{id}/ranking(id=${corrida.id})}" class="btn">🏆 Ranking da Corrida</a>            </div>
+
         </div>
 
         <div th:if="${#lists.isEmpty(corridasAtivas)}" class="empty-state">
