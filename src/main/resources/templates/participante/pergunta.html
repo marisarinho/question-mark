@@ -9,33 +9,42 @@
 
 <div class="page-wrapper">
     <div class="card">
+        
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 th:text="'Pergunta ' + ${indiceAtual} + ' de ' + ${totalPerguntas}"></h3>
-            <div id="timer" style="font-weight: bold; color: #d9534f; font-size: 1.2em;">--:--</div>
+            <span class="badge" th:text="'Pergunta ' + ${indiceAtual} + ' de ' + ${totalPerguntas}"></span>
+            <div id="timer" style="font-weight: 700; color: var(--danger); font-size: 1.2rem;">--:--</div>
         </div>
 
         <div class="divider"></div>
 
-        <h2 th:text="${pergunta.enunciado}"></h2>
+        <h2 class="pergunta-enunciado" th:text="${pergunta.enunciado}"></h2>
 
-        <!-- Formulário de resposta: só aparece se ainda não respondeu -->
         <form th:if="${acertou == null}" th:action="@{/corridas/{id}/pergunta(id=${pergunta.corrida.id})}" method="post">
-            <div th:each="alt, stat : ${pergunta.alternativas}" style="margin-bottom: 10px;">
-                <label class="card-detalhes" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 1px solid #eee; border-radius: 5px;">
-                    <input type="radio" name="resposta" th:value="${stat.index}" required />
-                    <span th:text="${alt}"></span>
+            
+            <div th:each="alt, stat : ${pergunta.alternativas}">
+                <label class="card-detalhes" style="justify-content: flex-start; gap: 15px; cursor: pointer;">
+                    <input type="radio" name="resposta" th:value="${stat.index}" required style="accent-color: var(--purple-primary); transform: scale(1.2);" />
+                    <span th:text="${alt}" style="font-weight: 500;"></span>
                 </label>
             </div>
-            <button type="submit" class="btn" style="margin-top: 20px;">Responder ✅</button>
+            
+            <button type="submit" class="btn btn-block" style="margin-top: 15px;">Responder ✅</button>
         </form>
 
-        <!-- Feedback: só aparece após responder -->
         <div th:if="${acertou != null}">
-            <p th:if="${acertou}" style="color:green; font-size: 1.3em;">✅ Você acertou!</p>
-            <p th:unless="${acertou}" style="color:red; font-size: 1.3em;">❌ Errou! A resposta correta era: <b th:text="${respostaCorreta}"></b></p>
+            
+            <div th:if="${acertou}" class="flash-ok">
+                <span style="font-size: 1.2em;">✅ Acertou!</span><br>
+                Você ganhou <b th:text="${ponto}"></b> pontos.
+            </div>
+
+            <div th:unless="${acertou}" class="flash-erro">
+                <span style="font-size: 1.2em;">❌ Errou!</span><br>
+                A resposta correta era: <b th:text="${respostaCorreta}"></b>
+            </div>
 
             <form th:action="@{/corridas/{id}/pergunta/proxima(id=${pergunta.corrida.id})}" method="post">
-                <button type="submit" class="btn" style="margin-top: 20px;">Próxima Pergunta ➡</button>
+                <button type="submit" class="btn btn-block">Próxima Pergunta ➡</button>
             </form>
         </div>
 
@@ -55,7 +64,7 @@
         const min = Math.floor(restante / 60);
         const seg = restante % 60;
         document.getElementById('timer').innerHTML = 
-            (min < 10 ? '0' : '') + min + ":" + (seg < 10 ? '0' : '') + seg;
+            "⏱ " + (min < 10 ? '0' : '') + min + ":" + (seg < 10 ? '0' : '') + seg;
             
         restante--;
     }

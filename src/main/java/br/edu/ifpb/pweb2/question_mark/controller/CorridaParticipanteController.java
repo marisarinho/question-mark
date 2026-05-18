@@ -46,7 +46,16 @@ public class CorridaParticipanteController {
                 redirect.addFlashAttribute("mensagem","Participante ja jogou essa corrida");
                 return "redirect:/home";
             };
-                
+            
+        int totalPerguntas = perguntaService.contarPerguntasPorCorrida(id);
+
+        if (totalPerguntas==0){
+                redirect.addFlashAttribute("mensagem","Corrida sem perguntas");
+                return "redirect:/home";
+            }
+
+       
+
         session.setAttribute("corridaId", id);
         session.setAttribute("inicioCorrida", LocalDateTime.now());
         session.setAttribute("indicePergunta", 0);
@@ -67,6 +76,8 @@ public class CorridaParticipanteController {
                 return finalizarCorrida(session, "Tempo esgotado!", redirectAttributes);
             }
 
+            
+
             Pergunta pergunta = perguntaService.getPerguntaPorIndice(corridaId, indice);
 
             if (pergunta == null) {
@@ -74,6 +85,10 @@ public class CorridaParticipanteController {
             }
 
             int totalPerguntas = perguntaService.contarPerguntasPorCorrida(corridaId);
+
+            if (totalPerguntas==0){
+
+            }
 
             model.addAttribute("pergunta", pergunta);
             model.addAttribute("totalPerguntas", totalPerguntas);
@@ -107,11 +122,13 @@ public class CorridaParticipanteController {
         }
 
       boolean acertou = perguntaService.verificarResposta(perguntaAtual, resposta);
+      Integer ponto = perguntaService.pontoPergunta(perguntaAtual);
 
     if (acertou) {
             Integer pontosAtuais = (Integer) session.getAttribute("pontuacaoAtual");
             session.setAttribute("pontuacaoAtual", perguntaService.calcularPontos(perguntaAtual, pontosAtuais));
             redirect.addFlashAttribute("acertou", true);
+            redirect.addFlashAttribute("ponto",ponto);
         } else {
             redirect.addFlashAttribute("acertou", false);
             redirect.addFlashAttribute("respostaCorreta", perguntaService.getTextoRespostaCorreta(perguntaAtual));
