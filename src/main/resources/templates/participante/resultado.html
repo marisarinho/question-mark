@@ -9,7 +9,8 @@
 
 <div class="page-wrapper">
     <div class="card" style="text-align: center;">
-        
+        <div th:if="${mensagem}" class="alert-success" th:text="${mensagem}"></div>
+
         <h1 style="color: #4CAF50; font-size: 2.5em; margin-bottom: 10px;">Corrida Finalizada! 🏁</h1>
         <p style="font-size: 1.2em; color: #555;">Sua pontuação final foi:</p>
         

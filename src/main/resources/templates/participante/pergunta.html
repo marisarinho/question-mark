@@ -9,7 +9,8 @@
 
 <div class="page-wrapper">
     <div class="card">
-        
+        <div th:if="${mensagem}" class="alert-success" th:text="${mensagem}"></div>
+
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <span class="badge" th:text="'Pergunta ' + ${indiceAtual} + ' de ' + ${totalPerguntas}"></span>
             <div id="timer" style="font-weight: 700; color: var(--danger); font-size: 1.2rem;">--:--</div>
