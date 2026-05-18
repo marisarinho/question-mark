@@ -13,7 +13,6 @@ import br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.model.NivelDificuldade;
 import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
 import br.edu.ifpb.pweb2.question_mark.service.CorridaService;
-import br.edu.ifpb.pweb2.question_mark.service.ParticipanteService;
 import br.edu.ifpb.pweb2.question_mark.service.PerguntaService;
 
 
@@ -22,7 +21,6 @@ import br.edu.ifpb.pweb2.question_mark.service.PerguntaService;
 public class PerguntaController {
 
 
-    private final ParticipanteService participanteService;
 
     @Autowired
     private CorridaService corridaService;
@@ -30,10 +28,7 @@ public class PerguntaController {
     @Autowired
     private PerguntaService perguntaService;
 
-    // olhar esse construtor
-    PerguntaController(ParticipanteService participanteService) {
-        this.participanteService = participanteService;
-    }
+    
     
     @GetMapping
     public String listar(@PathVariable Long corridaId, Model model) {

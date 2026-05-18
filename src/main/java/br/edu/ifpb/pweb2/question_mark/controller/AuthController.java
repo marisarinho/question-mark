@@ -48,7 +48,7 @@ public class AuthController {
     @GetMapping("/logout")
     public String logout(HttpSession httpSession, RedirectAttributes redirect) {
         httpSession.invalidate();
-        redirect.addFlashAttribute("mensagem","logout feto com sucesso");
+        redirect.addFlashAttribute("mensagem","Logout feto com sucesso");
         return "redirect:/login";
     }
     
