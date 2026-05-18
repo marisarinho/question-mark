@@ -54,7 +54,8 @@ public class CorridaParticipanteController {
                 return "redirect:/home";
             }
 
-       
+        redirect.addFlashAttribute("mensagem","Corrida começou!!");
+
 
         session.setAttribute("corridaId", id);
         session.setAttribute("inicioCorrida", LocalDateTime.now());
@@ -172,7 +173,7 @@ public class CorridaParticipanteController {
         
         redirectAttributes.addFlashAttribute("pontosFinais", pontos);
         redirectAttributes.addFlashAttribute("corridaId", corridaId);
-        redirectAttributes.addFlashAttribute("mensagemFinal", mensagem); 
+        redirectAttributes.addFlashAttribute("mensagem", mensagem); 
         
         return "redirect:/corridas/resultado"; 
     }

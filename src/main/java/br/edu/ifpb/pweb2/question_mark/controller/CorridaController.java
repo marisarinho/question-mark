@@ -41,7 +41,7 @@ public class CorridaController {
     public String formCorrida(Corrida corrida, RedirectAttributes redirect){
         corridaService.saveCorrida(corrida);
         redirect.addAttribute("corrida",corrida);
-        redirect.addFlashAttribute("mensagem","Usuario criada com sucesso");
+        redirect.addFlashAttribute("mensagem","Corrida criada com sucesso");
         return "redirect:/admin/corridas";
     }
 

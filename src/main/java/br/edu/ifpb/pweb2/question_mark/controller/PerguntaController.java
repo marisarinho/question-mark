@@ -76,7 +76,7 @@ public class PerguntaController {
                 Pergunta pergunta,
                 RedirectAttributes redirectAttributes) {
                 perguntaService.atualizarPergunta(id, pergunta);
-                redirectAttributes.addFlashAttribute("sucesso", "Pergunta atualizada com sucesso!");
+                redirectAttributes.addFlashAttribute("mensagem", "Pergunta atualizada com sucesso!");
                 return "redirect:/admin/corridas/{corridaId}/perguntas";
 
         }
