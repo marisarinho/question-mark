@@ -6,46 +6,57 @@
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
-    <h2 class="titulo-pagina">🏆 Ranking: <span th:text="${corrida.titulo}"></span></h2>
 
-<div class="page-wrapper">
-
-    <div th:if="${#lists.isEmpty(ranking)}" class="empty-state">
-        <p>Nenhum resultado cadastrado para essa corrida ainda.</p>
-    </div>
-
-    <div th:unless="${#lists.isEmpty(ranking)}">
-
-        <div th:unless="${temResultado}" class="alert-info">
-            <p>Você ainda não participou dessa corrida!</p>
+    <div class="lobby-header">
+        <h2 class="titulo-pagina" style="margin-bottom: 5px;">🏆 Ranking: <span th:text="${corrida.titulo}"></span></h2>
+        
+        <div class="acoes-topo">
+            <a th:href="@{/corridas/ranking}" class="btn">🏆 Ver Ranking Geral</a>
+            <a th:href="@{/home}" class="btn btn-secundario">⬅ Voltar</a>
         </div>
-
-        <table class="tabela-ranking">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nome</th>
-                    <th>Pontuação</th>
-                    <th>Data</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="resultado, resultadoStat : ${ranking}"
-                    th:class="${resultado.participante.id == participanteLogado.id} ? 'destaque' : ''">
-                    <td th:text="${resultadoStat.index + 1}"></td>
-                    <td th:text="${resultado.participante.nome}"></td>
-                    <td th:text="${resultado.pontuacao}"></td>
-                    <td th:text="${#temporals.format(resultado.dataHora, 'dd/MM/yyyy HH:mm')}"></td>
-                </tr>
-            </tbody>
-        </table>
-
     </div>
 
-    <a th:href="@{/corridas/ranking}" class="btn btn-secundario">🏆 Ver Ranking Geral</a>
-    <a th:href="@{/home}" class="btn btn-secundario">⬅ Voltar ao Lobby</a>
+    <div style="max-width: 900px; margin: 0 auto;">
+        
+        <div class="card">
 
-</div>
+            <div th:if="${#lists.isEmpty(ranking)}" class="empty-state">
+                <h3 style="color: var(--purple-primary); margin-bottom: 10px;">Ainda não há campeões!</h3>
+                <p>Nenhum resultado cadastrado para essa corrida ainda.</p>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(ranking)}">
+
+                <div th:unless="${temResultado}" class="flash-erro" style="background-color: #fff9f5; color: var(--warning); border-left-color: var(--warning);">
+                    Você ainda não participou dessa corrida!
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="tabela-ranking">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nome</th>
+                                <th>Pontuação</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="resultado, resultadoStat : ${ranking}"
+                                th:class="${resultado.participante.id == participanteLogado.id} ? 'destaque' : ''">
+                                <td th:text="${resultadoStat.index + 1}"></td>
+                                <td th:text="${resultado.participante.nome}"></td>
+                                <td th:text="${resultado.pontuacao}"></td>
+                                <td th:text="${#temporals.format(resultado.dataHora, 'dd/MM/yyyy HH:mm')}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 
 </body>
 </html>

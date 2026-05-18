@@ -224,6 +224,8 @@ form button[type="submit"] {
 .btn-secundario {
     background-color: var(--text-muted);
 }
+
+
 .btn-secundario:hover {
     background-color: #495057;
     box-shadow: 0 4px 10px rgba(108, 117, 125, 0.3);

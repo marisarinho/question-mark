@@ -71,6 +71,10 @@ public class PerguntaService {
         return pontosAtuais + pergunta.getNivel().getPontos();
     }
 
+    public Integer pontoPergunta(Pergunta pergunta){
+        return pergunta.getNivel().getPontos();
+    }
+    
     public String getTextoRespostaCorreta(Pergunta pergunta) {
         return pergunta.getAlternativas().get(pergunta.getRespostaCorreta());
     }

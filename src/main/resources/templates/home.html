@@ -2,39 +2,41 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Lobby - Question Mark</title>
+    <title>Home - Question Mark</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
-<div th:if="${mensagem}" class="alert-success" th:text="${mensagem}"></div>
-<a th:href="@{/corridas/ranking}" class="btn">🏆 Ver Ranking</a>
+
+    <div th:if="${mensagem}" class="alert-success" th:text="${mensagem}"></div>
+
     <div class="lobby-header">
-        <h1 class="titulo-pagina" style="margin-bottom: 5px;">🏁 Lobby de Corridas</h1>
+        <h1 class="titulo-pagina" style="margin-bottom: 5px;">🏁 Lista de Corridas</h1>
         <h2 class="subtitulo">Olá, <span th:text="${nomeParticipante}"></span>! Preparado para o desafio?</h2>
         
-        <a th:href="@{/logout}" class="btn btn-secundario">🚪 Sair da Sessão</a>
+        <div class="acoes-topo">
+            <a th:href="@{/corridas/ranking}" class="btn">🏆 Ver Ranking Geral </a>
+            <a th:href="@{/logout}" class="btn btn-secundario">Logout</a>
+        </div>
     </div>
 
     <div class="cards-container">
         
         <div class="card" th:each="corrida : ${corridasAtivas}">
             
-            <h2 th:text="${corrida.titulo}">Título da Corrida</h2>
-            <p th:text="${corrida.descricao}">Descrição da corrida...</p>
+            <h2 class="pergunta-header" th:text="${corrida.titulo}">Título da Corrida</h2>
+            <p class="pergunta-enunciado" th:text="${corrida.descricao}">Descrição da corrida...</p>
             
             <div class="card-detalhes">
-                <span>⏱ Tempo: <b th:text="${corrida.tempoSegundos}"></b>s</span><br>
-                <span>📝 Quantidade de perguntas: <b th:text="${#lists.size(corrida.perguntas)}"></b></span>
+                <span>⏱ Tempo: <b th:text="${corrida.tempoSegundos}"></b>s</span>
+                <span>📝 Perguntas: <b th:text="${#lists.size(corrida.perguntas)}"></b></span>
             </div>
 
             <hr>
 
             <div class="card-acoes">
                 <a th:href="@{/corridas/{id}/iniciar(id=${corrida.id})}" class="btn btn-sucesso btn-block">🚀 Iniciar Corrida</a>
+                <a th:href="@{/corridas/{id}/ranking(id=${corrida.id})}" class="btn btn-block">🏆 Ranking da Corrida</a>
             </div>
-            
-             <div style="margin-top: 20px; display: flex; justify-content: center; gap: 15px;">
-                <a th:href="@{/corridas/{id}/ranking(id=${corrida.id})}" class="btn">🏆 Ranking da Corrida</a>            </div>
 
         </div>
 
