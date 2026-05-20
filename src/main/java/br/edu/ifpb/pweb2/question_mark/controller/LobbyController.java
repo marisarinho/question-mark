@@ -34,9 +34,7 @@ public class LobbyController {
             Participante participante = (Participante) session.getAttribute("participanteLogado");
             
             
-            if (participante == null) {
-                return "redirect:/login"; 
-            }
+        
 
             
             model.addAttribute("nomeParticipante", participante.getNome());
