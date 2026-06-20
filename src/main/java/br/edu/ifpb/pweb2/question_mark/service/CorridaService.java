@@ -66,5 +66,19 @@ public class CorridaService {
         return corrida.getTempoSegundos();
 
     }
+
+    public Integer tempoRestanteEmSegundos(Long corridaId, LocalDateTime inicioCorrida) {
+        Corrida corrida = this.findById(corridaId);
+        int tempoTotal = corrida.getTempoSegundos();
+        long segundosPassados = ChronoUnit.SECONDS.between(inicioCorrida, LocalDateTime.now());
+        
+        int restante = (int) (tempoTotal - segundosPassados);
+        
+        if (restante > 0) {
+            return restante;
+        } else {
+            return 0;
+        }
+    }
   
 }

@@ -94,7 +94,7 @@ public class CorridaParticipanteController {
             model.addAttribute("pergunta", pergunta);
             model.addAttribute("totalPerguntas", totalPerguntas);
             model.addAttribute("indiceAtual", indice + 1);
-            model.addAttribute("tempoRestante", corridaService.tempoSegundos(corridaId));
+            model.addAttribute("tempoRestante", corridaService.tempoRestanteEmSegundos(corridaId,inicio));
             model.addAttribute("corridaId", corridaId);
 
             return "participante/pergunta";
