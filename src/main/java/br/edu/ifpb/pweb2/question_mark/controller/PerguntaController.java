@@ -1,14 +1,20 @@
 package br.edu.ifpb.pweb2.question_mark.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.edu.ifpb.pweb2.question_mark.exception.RecursoNaoEncontradoException;
 import br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.model.NivelDificuldade;
 import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
@@ -51,10 +57,11 @@ public class PerguntaController {
 
     
     @PostMapping("/nova")
-    public String salvar(@PathVariable Long corridaId, Pergunta pergunta, RedirectAttributes flash) {
+    public String salvar(@PathVariable Long corridaId, Pergunta pergunta,
+            @RequestParam(required = false) MultipartFile imagem, RedirectAttributes flash) {
         Corrida corrida = corridaService.findById(corridaId);
         pergunta.setCorrida(corrida);
-        perguntaService.savePergunta(pergunta);
+        perguntaService.savePergunta(pergunta, imagem);
         flash.addFlashAttribute("mensagem", "Pergunta adicionada com sucesso!");
         return "redirect:/admin/corridas/" + corridaId + "/perguntas";
     }
@@ -74,12 +81,27 @@ public class PerguntaController {
         public String atualizarCorrida(
                 @PathVariable Long id,
                 Pergunta pergunta,
+                @RequestParam(required = false) MultipartFile imagem,
+                @RequestParam(defaultValue = "false") boolean excluirImagem,
                 RedirectAttributes redirectAttributes) {
-                perguntaService.atualizarPergunta(id, pergunta);
+                perguntaService.atualizarPergunta(id, pergunta, imagem, excluirImagem);
                 redirectAttributes.addFlashAttribute("mensagem", "Pergunta atualizada com sucesso!");
                 return "redirect:/admin/corridas/{corridaId}/perguntas";
 
         }
+
+    @GetMapping("/{id}/imagem")
+    public ResponseEntity<byte[]> exibirImagem(@PathVariable Long id) {
+        Pergunta pergunta = perguntaService.findById(id);
+        if (pergunta.getImagem() == null) {
+            throw new RecursoNaoEncontradoException("Esta pergunta não possui imagem.");
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(pergunta.getImagemTipo()))
+                .cacheControl(CacheControl.noCache())
+                .body(pergunta.getImagem());
+    }
     
     
 

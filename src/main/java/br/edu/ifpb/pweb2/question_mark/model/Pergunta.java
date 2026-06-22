@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,11 @@ public class Pergunta {
     private String enunciado; 
     private Integer respostaCorreta;
 
+    @Lob
+    private byte[] imagem;
+
+    private String imagemNome;
+    private String imagemTipo;
 
     @ElementCollection
     private List<String> alternativas;
