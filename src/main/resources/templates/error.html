@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: pagina('Ops! Algo deu errado', ~{::main})}">
+<main class="pagina-erro">
+    <div class="card card-erro">
+        <div class="icone-erro">❔</div>
+        <span class="codigo-erro" th:text="${status} ?: 'Erro'">Erro</span>
+        <h1>💜 O Question Mark tropeçou</h1>
+        <p th:text="${message != null and !#strings.isEmpty(message)}
+                ? ${message}
+                : 'Não foi possível abrir esta página. Tente novamente em instantes.'">
+            Não foi possível abrir esta página.
+        </p>
+
+        <div class="acoes-erro">
+            <button type="button" class="btn btn-secundario" onclick="history.back()">Voltar</button>
+            <a th:href="@{/home}" class="btn">Ir para o início</a>
+        </div>
+    </div>
+</main>
+</html>
