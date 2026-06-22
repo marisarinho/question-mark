@@ -1,6 +1,7 @@
 package br.edu.ifpb.pweb2.question_mark.config;
 
 import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,29 +20,60 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity // Necessário para habilitar o @PreAuthorize
+@EnableMethodSecurity
 public class QuestionMarkSecurityConfig {
 
     @Autowired
-    private DataSource dataSource;
+    private DataSource dataSource; 
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/imagens/**", "/login").permitAll()
+                // Liberamos a tela de login e a nova tela de cadastro (/registar)
+                .requestMatchers("/css/**", "/imagens/**", "/login", "/registar").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN") 
-                .requestMatchers("/corridas/**").hasAnyRole("PARTICIPANTE", "ADMIN") // admin entra aqui tbm?
-                .anyRequest().authenticated())
-            .formLogin((form) -> form
+                .requestMatchers("/corridas/**").hasRole("PARTICIPANTE") 
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/home", true)
-                .permitAll())
-            .logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout"))
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+            )
             .exceptionHandling(ex -> ex.accessDeniedPage("/acesso-negado")); 
+            
         return http.build();
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(); 
+    }
 
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails admin = User.withUsername("admin")
+            .password(passwordEncoder().encode("admin123"))
+            .roles("ADMIN").build();
 
+        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+        
+        if (!users.userExists(admin.getUsername())) {
+            users.createUser(admin);
+        }
+        return users;
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService());
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
 }

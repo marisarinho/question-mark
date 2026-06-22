@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Acesso Negado - Question Mark</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="card" style="text-align: center;">
+        <div class="logo">
+            <div class="logo-icon" style="animation: none;">❌</div>
+            <h1 style="color: var(--danger);">Acesso Negado</h1>
+            <p>Você não possui permissão para acessar este recurso.</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <p style="color: var(--text-muted);">
+            Seus perfis de usuário não permitem a visualização desta página. 
+            Caso ache que isso é um erro, entre em contato com o administrador do sistema.
+        </p>
+
+        <div style="margin-top: 25px;">
+            <a th:href="@{/home}" class="btn">🏠 Voltar para a Home</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

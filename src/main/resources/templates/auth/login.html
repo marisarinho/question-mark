@@ -13,22 +13,37 @@
         <div class="logo">
             <div class="logo-icon">🏁</div>
             <h1>QUESTION MARK</h1>
-            <p>Compete. Responda. Vença.</p>
         </div>
 
         <div class="divider"></div>
 
-        <div class="flash-erro" th:if="${erro}" th:text="${erro}"></div>
+        <div class="flash-erro" th:if="${param.error}">
+            Utilizador ou palavra-passe inválidos. Tente novamente.
+        </div>
+        
+        <div class="flash-ok" th:if="${param.logout}">
+            Saiu do sistema com sucesso.
+        </div>
+
         <div class="flash-ok" th:if="${mensagem}" th:text="${mensagem}"></div>
 
-        <form action="/login" method="post">
-            <label for="nome">Nome</label>
-            <input type="text" id="nome" name="nome" 
-                   placeholder="Digite seu nome" required />
+        <form th:action="@{/login}" method="post">
+            
+            <label for="username">Nome de Utilizador</label>
+            <input type="text" id="username" name="username" 
+                   placeholder="Digite o seu nome" required autofocus />
 
+            <label for="password">Palavra-passe</label>
+            <input type="password" id="password" name="password" 
+                   placeholder="Digite a sua palavra-passe" required />
 
-            <button class="btn" type="submit">Entrar na corrida</button>
+            <button class="btn btn-block" type="submit" style="margin-top: 15px;">Entrar na corrida</button>
         </form>
+
+        <div style="text-align: center; margin-top: 20px; font-size: 0.9em;">
+            <span style="color: var(--text-muted);">Ainda não tem conta?</span> 
+            <a th:href="@{/registar}" style="color: var(--primary); text-decoration: none; font-weight: bold;">Registe-se aqui</a>
+        </div>
 
         <div class="footer">
             Instituto Federal da Paraíba 
