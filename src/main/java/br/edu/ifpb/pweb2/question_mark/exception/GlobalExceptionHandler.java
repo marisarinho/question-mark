@@ -14,35 +14,13 @@ import jakarta.servlet.http.HttpServletResponse;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RecursoNaoEncontradoException.class)
-    public ModelAndView tratarRecursoNaoEncontrado(RecursoNaoEncontradoException exception,
-            HttpServletRequest request, HttpServletResponse response) {
-        return criarPaginaErro(
-                HttpStatus.NOT_FOUND,
-                "🔎 Não encontramos isso",
-                exception.getMessage(),
-                request,
-                response);
-    }
-
-    @ExceptionHandler({ArquivoInvalidoException.class, MaxUploadSizeExceededException.class})
-    public ModelAndView tratarArquivoInvalido(Exception exception,
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ModelAndView tratarArquivoMuitoGrande(MaxUploadSizeExceededException exception,
             HttpServletRequest request, HttpServletResponse response) {
         return criarPaginaErro(
                 HttpStatus.PAYLOAD_TOO_LARGE,
                 "🖼️ Essa imagem ficou grandona demais",
                 "Escolha uma imagem válida com até 2 MB e tente novamente.",
-                request,
-                response);
-    }
-
-    @ExceptionHandler(EstadoCorridaInvalidoException.class)
-    public ModelAndView tratarEstadoCorridaInvalido(EstadoCorridaInvalidoException exception,
-            HttpServletRequest request, HttpServletResponse response) {
-        return criarPaginaErro(
-                HttpStatus.CONFLICT,
-                "🏁 Essa corrida já não está em andamento",
-                exception.getMessage(),
                 request,
                 response);
     }
@@ -58,17 +36,6 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 "🤔 Não conseguimos entender esse pedido",
                 "Confira os dados informados e tente outra vez.",
-                request,
-                response);
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ModelAndView tratarErroInesperado(Exception exception,
-            HttpServletRequest request, HttpServletResponse response) {
-        return criarPaginaErro(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "💜 Ops! O Question Mark tropeçou",
-                "Aconteceu algo inesperado. Você pode voltar e tentar novamente.",
                 request,
                 response);
     }
