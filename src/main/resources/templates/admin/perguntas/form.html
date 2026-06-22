@@ -38,8 +38,8 @@
                 </select>
             <div class="divider"></div>
 
-            <label for="imagem">Imagem da pergunta (opcional):</label>
-            <input type="file" id="imagem" name="imagem" accept="image/*" />
+            <label for="arquivoImagem">Imagem da pergunta (opcional):</label>
+            <input type="file" id="arquivoImagem" name="arquivoImagem" accept="image/*" />
             <small class="ajuda-campo">Envie uma imagem relacionada à pergunta. Tamanho máximo: 2 MB.</small>
 
             <div th:if="${pergunta.id != null and pergunta.imagem != null}" class="imagem-edicao">

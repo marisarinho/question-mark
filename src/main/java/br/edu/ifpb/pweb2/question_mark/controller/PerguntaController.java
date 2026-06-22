@@ -54,7 +54,8 @@ public class PerguntaController {
     
     @PostMapping("/nova")
     public String salvar(@PathVariable Long corridaId, Pergunta pergunta,
-            @RequestParam(required = false) MultipartFile imagem, RedirectAttributes flash) {
+            @RequestParam(name = "arquivoImagem", required = false) MultipartFile imagem,
+            RedirectAttributes flash) {
         Corrida corrida = corridaService.findById(corridaId);
         pergunta.setCorrida(corrida);
         perguntaService.savePergunta(pergunta, imagem);
@@ -77,7 +78,7 @@ public class PerguntaController {
         public String atualizarCorrida(
                 @PathVariable Long id,
                 Pergunta pergunta,
-                @RequestParam(required = false) MultipartFile imagem,
+                @RequestParam(name = "arquivoImagem", required = false) MultipartFile imagem,
                 @RequestParam(defaultValue = "false") boolean excluirImagem,
                 RedirectAttributes redirectAttributes) {
                 perguntaService.atualizarPergunta(id, pergunta, imagem, excluirImagem);
