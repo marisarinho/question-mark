@@ -24,7 +24,7 @@
             <h3 class="pergunta-header" th:text="'Pergunta ' + ${iterStat.index + 1}">Pergunta 1</h3>
             <p class="pergunta-enunciado" th:text="${p.enunciado}">Enunciado da pergunta vai aqui</p>
             <img th:if="${p.imagem != null}"
-                 th:src="@{/admin/corridas/{corridaId}/perguntas/{id}/imagem(corridaId=${corrida.id}, id=${p.id})}"
+                 th:src="@{/perguntas/{id}/imagem(id=${p.id})}"
                  alt="Imagem da pergunta" class="pergunta-imagem" />
             
             <hr>

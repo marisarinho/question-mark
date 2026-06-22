@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.edu.ifpb.pweb2.question_mark.exception.EstadoCorridaInvalidoException;
 import br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.model.Participante;
 import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
@@ -73,7 +74,9 @@ public class CorridaParticipanteController {
             Integer indice = (Integer) session.getAttribute("indicePergunta");
             LocalDateTime inicio = (LocalDateTime) session.getAttribute("inicioCorrida");
 
-            if (indice == null || corridaService.tempoEstourado(corridaId, inicio)) {
+            validarCorridaEmAndamento(id, corridaId, indice, inicio);
+
+            if (corridaService.tempoEstourado(corridaId, inicio)) {
                 return finalizarCorrida(session, "Tempo esgotado!", redirectAttributes);
             }
 
@@ -110,6 +113,8 @@ public class CorridaParticipanteController {
         Integer indice = (Integer) session.getAttribute("indicePergunta");
         LocalDateTime inicio = (LocalDateTime) session.getAttribute("inicioCorrida");
 
+        validarCorridaEmAndamento(id, corridaId, indice, inicio);
+
         if (corridaService.tempoEstourado(id, inicio)) {
            
             return finalizarCorrida(session, "Tempo esgotado!", redirect);
@@ -142,6 +147,10 @@ public class CorridaParticipanteController {
         public String proxima(@PathVariable Long id, HttpSession session, RedirectAttributes redirect) {
             Long corridaId = (Long) session.getAttribute("corridaId");
             Integer indice = (Integer) session.getAttribute("indicePergunta");
+            LocalDateTime inicio = (LocalDateTime) session.getAttribute("inicioCorrida");
+
+            validarCorridaEmAndamento(id, corridaId, indice, inicio);
+
             indice++;
             session.setAttribute("indicePergunta", indice);
 
@@ -153,6 +162,13 @@ public class CorridaParticipanteController {
 
             return "redirect:/corridas/" + id + "/pergunta";
         }
+
+    private void validarCorridaEmAndamento(Long id, Long corridaId, Integer indice, LocalDateTime inicio) {
+        if (corridaId == null || indice == null || inicio == null || !id.equals(corridaId)) {
+            throw new EstadoCorridaInvalidoException(
+                    "Volte para o início e escolha uma corrida para jogar.");
+        }
+    }
 
 
     private String finalizarCorrida(HttpSession session, String mensagem, RedirectAttributes redirectAttributes) {

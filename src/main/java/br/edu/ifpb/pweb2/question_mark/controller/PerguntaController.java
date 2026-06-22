@@ -1,9 +1,6 @@
 package br.edu.ifpb.pweb2.question_mark.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.CacheControl;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import br.edu.ifpb.pweb2.question_mark.exception.RecursoNaoEncontradoException;
 import br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.model.NivelDificuldade;
 import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
@@ -89,21 +85,6 @@ public class PerguntaController {
                 return "redirect:/admin/corridas/{corridaId}/perguntas";
 
         }
-
-    @GetMapping("/{id}/imagem")
-    public ResponseEntity<byte[]> exibirImagem(@PathVariable Long id) {
-        Pergunta pergunta = perguntaService.findById(id);
-        if (pergunta.getImagem() == null) {
-            throw new RecursoNaoEncontradoException("Esta pergunta não possui imagem.");
-        }
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(pergunta.getImagemTipo()))
-                .cacheControl(CacheControl.noCache())
-                .body(pergunta.getImagem());
-    }
-    
-    
 
     @PostMapping("/{perguntaId}/deletar")
     public String deletar(@PathVariable Long corridaId, @PathVariable Long perguntaId, RedirectAttributes flash) {

@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpb.pweb2.question_mark.exception.RecursoNaoEncontradoException;
 import  br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.repository.CorridaRepository;
 
@@ -21,7 +22,8 @@ public class CorridaService {
     }
 
     public Corrida findById(Long id){
-        return corridaRepository.findById(id).orElse(null);
+        return corridaRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Corrida não encontrada."));
     }
 
 
@@ -31,24 +33,18 @@ public class CorridaService {
     }
     
     public Corrida atualizarCorrida(Long id, Corrida corrida){
-        Corrida corridaEncontrada = corridaRepository.findById(id).orElse(null);
-        if (corridaEncontrada!= null) {
-            corridaEncontrada.setTitulo(corrida.getTitulo());
-            corridaEncontrada.setDescricao(corrida.getDescricao());
-            corridaEncontrada.setTempoSegundos(corrida.getTempoSegundos());
-            corridaEncontrada.setAtiva(corrida.getAtiva());
-            return corridaRepository.save(corridaEncontrada);
-        }
-        return corridaEncontrada;
+        Corrida corridaEncontrada = findById(id);
+        corridaEncontrada.setTitulo(corrida.getTitulo());
+        corridaEncontrada.setDescricao(corrida.getDescricao());
+        corridaEncontrada.setTempoSegundos(corrida.getTempoSegundos());
+        corridaEncontrada.setAtiva(corrida.getAtiva());
+        return corridaRepository.save(corridaEncontrada);
 
         }
 
     public void deletarCorrida(Long id){
-            if (corridaRepository.existsById(id)) {
-                corridaRepository.deleteById(id);
-            }
-        
-
+        Corrida corrida = findById(id);
+        corridaRepository.delete(corrida);
     }
     
     public List<Corrida> todasCorridas(){

@@ -43,7 +43,7 @@
             <small class="ajuda-campo">Envie uma imagem relacionada à pergunta. Tamanho máximo: 2 MB.</small>
 
             <div th:if="${pergunta.id != null and pergunta.imagem != null}" class="imagem-edicao">
-                <img th:src="@{/admin/corridas/{corridaId}/perguntas/{id}/imagem(corridaId=${corridaId}, id=${pergunta.id})}"
+                <img th:src="@{/perguntas/{id}/imagem(id=${pergunta.id})}"
                      alt="Imagem atual da pergunta" class="pergunta-imagem" />
                 <label class="opcao-excluir">
                     <input type="checkbox" name="excluirImagem" value="true" />
