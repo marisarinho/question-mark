@@ -1,7 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{fragments/layout :: pagina(${tituloErro}, ~{::main})}">
-<main class="pagina-erro">
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title th:text="${tituloErro}">Erro</title>
+</head>
+<main class="pagina-erro" layout:fragment="conteudo">
     <div class="card card-erro">
         <div class="icone-erro">❔</div>
         <span class="codigo-erro" th:text="${status}">500</span>
