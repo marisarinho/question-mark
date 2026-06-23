@@ -45,7 +45,7 @@
                             <tr th:each="resultado, resultadoStat : ${ranking}"
                                 th:class="${resultado.participante.id == participanteLogado.id} ? 'destaque' : ''">
                                 <td th:text="${resultadoStat.index + 1}"></td>
-                                <td th:text="${resultado.participante.nome}"></td>
+                                <td th:text="${resultado.participante.user.username}"></td>
                                 <td th:text="${resultado.pontuacao}"></td>
                                 <td th:text="${#temporals.format(resultado.dataHora, 'dd/MM/yyyy HH:mm')}"></td>
                             </tr>

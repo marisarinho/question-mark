@@ -180,7 +180,8 @@ label {
 
 input[type="text"], 
 input[type="number"],
-input[type="email"] 
+input[type="password"],
+input[type="email"]
 {
     width: 100%;
     padding: 12px;
@@ -195,7 +196,8 @@ input[type="email"]
 
 /* Efeito ao clicar no input (borda roxa) */
 input[type="text"]:focus, 
-input[type="number"]:focus 
+input[type="number"]:focus
+input[type="password"]:focus 
 input[type="email"]:focus{
     border-color: var(--purple-primary);
     outline: none;
@@ -512,4 +514,9 @@ form button[type="submit"] {
     justify-content: center;
     gap: 10px;
     margin-top: 25px;
+}
+.form-logout button[type="submit"] {
+    width: auto;
+    font-size: inherit;
+    padding: 10px 18px;
 }
