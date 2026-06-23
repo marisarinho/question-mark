@@ -42,7 +42,6 @@ public class CorridaController {
     @PostMapping("/nova")
     public String formCorrida(Corrida corrida, RedirectAttributes redirect){
         corridaService.saveCorrida(corrida);
-        redirect.addAttribute("corrida",corrida);
         redirect.addFlashAttribute("mensagem","Corrida criada com sucesso");
         return "redirect:/admin/corridas";
     }
@@ -59,7 +58,6 @@ public class CorridaController {
     @PostMapping("/{id}/editar")
     public String atualizarCorrida(@PathVariable Long id, Corrida corrida, RedirectAttributes redirect )  {
         corridaService.atualizarCorrida(id,corrida);
-        redirect.addAttribute("id",id);
         redirect.addFlashAttribute("mensagem","Corrida editada com sucesso");
         
         return "redirect:/admin/corridas";

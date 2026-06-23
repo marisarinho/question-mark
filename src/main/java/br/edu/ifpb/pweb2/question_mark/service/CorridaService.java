@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpb.pweb2.question_mark.exception.RecursoNaoEncontradoException;
 import  br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.repository.CorridaRepository;
 
@@ -21,34 +22,31 @@ public class CorridaService {
     }
 
     public Corrida findById(Long id){
-        return corridaRepository.findById(id).orElse(null);
+        return corridaRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Corrida não encontrada."));
     }
 
 
     public Corrida saveCorrida(Corrida corrida){
+        validarCorrida(corrida);
         return corridaRepository.save(corrida);
     
     }
     
     public Corrida atualizarCorrida(Long id, Corrida corrida){
-        Corrida corridaEncontrada = corridaRepository.findById(id).orElse(null);
-        if (corridaEncontrada!= null) {
-            corridaEncontrada.setTitulo(corrida.getTitulo());
-            corridaEncontrada.setDescricao(corrida.getDescricao());
-            corridaEncontrada.setTempoSegundos(corrida.getTempoSegundos());
-            corridaEncontrada.setAtiva(corrida.getAtiva());
-            return corridaRepository.save(corridaEncontrada);
-        }
-        return corridaEncontrada;
+        validarCorrida(corrida);
+        Corrida corridaEncontrada = findById(id);
+        corridaEncontrada.setTitulo(corrida.getTitulo());
+        corridaEncontrada.setDescricao(corrida.getDescricao());
+        corridaEncontrada.setTempoSegundos(corrida.getTempoSegundos());
+        corridaEncontrada.setAtiva(corrida.getAtiva());
+        return corridaRepository.save(corridaEncontrada);
 
         }
 
     public void deletarCorrida(Long id){
-            if (corridaRepository.existsById(id)) {
-                corridaRepository.deleteById(id);
-            }
-        
-
+        Corrida corrida = findById(id);
+        corridaRepository.delete(corrida);
     }
     
     public List<Corrida> todasCorridas(){
@@ -61,6 +59,24 @@ public class CorridaService {
             long segundosPassados = ChronoUnit.SECONDS.between(inicioCorrida, LocalDateTime.now());
             return segundosPassados>=tempoSegundos;
         }
+
+    private void validarCorrida(Corrida corrida) {
+        if (corrida.getTitulo() == null || corrida.getTitulo().isBlank()) {
+            throw new IllegalArgumentException("Informe o titulo da corrida.");
+        }
+
+        if (corrida.getDescricao() == null || corrida.getDescricao().isBlank()) {
+            throw new IllegalArgumentException("Informe a descricao da corrida.");
+        }
+
+        if (corrida.getTempoSegundos() == null || corrida.getTempoSegundos() <= 0) {
+            throw new IllegalArgumentException("O tempo da corrida precisa ser maior que zero.");
+        }
+
+        if (corrida.getAtiva() == null) {
+            corrida.setAtiva(false);
+        }
+    }
     public Integer tempoSegundos(Long corridaId){
         Corrida corrida = findById(corridaId);
         return corrida.getTempoSegundos();

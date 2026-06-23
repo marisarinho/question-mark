@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title th:text="${tituloErro}">Erro</title>
+</head>
+<main class="pagina-erro" layout:fragment="conteudo">
+    <div class="card card-erro">
+        <div class="icone-erro">❔</div>
+        <span class="codigo-erro" th:text="${status}">500</span>
+        <h1 th:text="${tituloErro}">Ops! Algo deu errado</h1>
+        <p th:text="${mensagemErro}">Não foi possível concluir a operação.</p>
+        <small th:if="${caminho}" th:text="'Caminho: ' + ${caminho}"></small>
+
+        <div class="acoes-erro">
+            <button type="button" class="btn btn-secundario" onclick="history.back()">Voltar</button>
+            <a th:href="@{/}" class="btn">Ir para o início</a>
+        </div>
+    </div>
+</main>
+</html>

@@ -2,6 +2,7 @@ package br.edu.ifpb.pweb2.question_mark.model;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,6 +28,11 @@ public class Pergunta {
     private String enunciado; 
     private Integer respostaCorreta;
 
+    @Column(columnDefinition = "bytea")
+    private byte[] imagem;
+
+    private String imagemNome;
+    private String imagemTipo;
 
     @ElementCollection
     private List<String> alternativas;

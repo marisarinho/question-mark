@@ -19,6 +19,9 @@
         <div class="divider"></div>
 
         <h2 class="pergunta-enunciado" th:text="${pergunta.enunciado}"></h2>
+        <img th:if="${pergunta.imagem != null}"
+             th:src="@{/perguntas/{id}/imagem(id=${pergunta.id})}"
+             alt="Imagem relacionada à pergunta" class="pergunta-imagem" />
 
         <form th:if="${acertou == null}" th:action="@{/corridas/{id}/pergunta(id=${pergunta.corrida.id})}" method="post">
             

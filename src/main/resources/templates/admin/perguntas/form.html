@@ -13,7 +13,7 @@
         
         <div class="divider"></div>
         <form th:action="${pergunta.id == null} ? @{/admin/corridas/{corridaId}/perguntas/nova(corridaId=${corridaId})} : @{/admin/corridas/{corridaId}/perguntas/{id}/editar(corridaId=${corridaId}, id=${pergunta.id})}"
-              th:object="${pergunta}" method="post">
+              th:object="${pergunta}" method="post" enctype="multipart/form-data">
             
             <label for="enunciado">Enunciado da Pergunta:</label>
             <input type="text" id="enunciado" th:field="*{enunciado}" placeholder="Ex: Qual a capital do Brasil?" required />
@@ -36,6 +36,21 @@
                     <option value="2">Opção 3</option>
                     <option value="3">Opção 4</option>
                 </select>
+            <div class="divider"></div>
+
+            <label for="arquivoImagem">Imagem da pergunta (opcional):</label>
+            <input type="file" id="arquivoImagem" name="arquivoImagem" accept="image/*" />
+            <small class="ajuda-campo">Envie uma imagem relacionada à pergunta. Tamanho máximo: 2 MB.</small>
+
+            <div th:if="${pergunta.id != null and pergunta.imagem != null}" class="imagem-edicao">
+                <img th:src="@{/perguntas/{id}/imagem(id=${pergunta.id})}"
+                     alt="Imagem atual da pergunta" class="pergunta-imagem" />
+                <label class="opcao-excluir">
+                    <input type="checkbox" name="excluirImagem" value="true" />
+                    Excluir imagem atual
+                </label>
+            </div>
+
             <div class="divider"></div>
             
             <label for="nivel">Nível de Dificuldade:</label>
