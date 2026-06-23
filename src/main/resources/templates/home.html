@@ -15,7 +15,9 @@
         
         <div class="acoes-topo">
             <a th:href="@{/corridas/ranking}" class="btn">🏆 Ver Ranking Geral </a>
-            <a th:href="@{/logout}" class="btn btn-secundario">Logout</a>
+            <form th:action="@{/logout}" method="post" class="form-logout">
+                <button type="submit" class="btn btn-secundario">Logout</button>
+            </form>
         </div>
     </div>
 
@@ -27,8 +29,7 @@
             <p class="pergunta-enunciado" th:text="${corrida.descricao}">Descrição da corrida...</p>
             
             <div class="card-detalhes">
-                <span>⏱ Tempo: <b th:text="${corrida.tempoSegundos}"></b>s</span>
-                <span>📝 Perguntas: <b th:text="${#lists.size(corrida.perguntas)}"></b></span>
+                <span>Tempo: <b th:text="${corrida.tempoSegundos}"></b>s</span>
             </div>
 
             <hr>

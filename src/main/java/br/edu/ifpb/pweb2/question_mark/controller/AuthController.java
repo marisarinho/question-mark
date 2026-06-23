@@ -1,22 +1,20 @@
 package br.edu.ifpb.pweb2.question_mark.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import br.edu.ifpb.pweb2.question_mark.model.Authority;
 import br.edu.ifpb.pweb2.question_mark.model.Participante;
 import br.edu.ifpb.pweb2.question_mark.model.User;
+import br.edu.ifpb.pweb2.question_mark.repository.AuthorityRepository;
 import br.edu.ifpb.pweb2.question_mark.repository.ParticipanteRepository;
 import br.edu.ifpb.pweb2.question_mark.repository.UserRepository;
-import br.edu.ifpb.pweb2.question_mark.service.ParticipanteService;
-import jakarta.servlet.http.HttpSession;
 
 
 
@@ -24,15 +22,15 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("")
 public class AuthController {
-    
-
-    @Autowired
-    private ParticipanteService participanteService;
 
     @Autowired 
     private ParticipanteRepository participanteRepository;
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -47,8 +45,9 @@ public class AuthController {
         return "auth/cadastro";
     }
 
-   @PostMapping("/cadasto")
-    public String realizarCadastro(String username, String password, String email, RedirectAttributes redirect) {
+    @Transactional
+    @PostMapping("/cadastro")
+    public String realizarCadastro(String username, String password, RedirectAttributes redirect) {
         
         if (userRepository.existsById(username)) {
             redirect.addFlashAttribute("erro", "Esse nome já está em uso.");
@@ -63,12 +62,12 @@ public class AuthController {
         Authority authority = new Authority();
         authority.setId(new Authority.AuthorityId(username, "ROLE_PARTICIPANTE"));
         authority.setAuthority("ROLE_PARTICIPANTE");
-        novoUsuario.setAuthorities(List.of(authority));
 
         userRepository.save(novoUsuario);
+        authorityRepository.save(authority);
 
         Participante participante = new Participante();
-        participante.setNome(username);
+        participante.setUser(novoUsuario);
         participanteRepository.save(participante);
 
         redirect.addFlashAttribute("mensagem", "Conta criada com sucesso! Faça login para jogar.");

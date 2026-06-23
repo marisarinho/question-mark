@@ -30,15 +30,23 @@ public class QuestionMarkSecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                // Liberamos a tela de login e a nova tela de cadastro (/registar)
-                .requestMatchers("/css/**", "/imagens/**", "/login", "/registar").permitAll()
+                .requestMatchers("/css/**", "/imagens/**", "/login", "/cadastro").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN") 
                 .requestMatchers("/corridas/**").hasRole("PARTICIPANTE") 
                 .anyRequest().authenticated()
             )
-            .formLogin(form -> form
+           .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/home", true)
+                .successHandler((request, response, authentication) -> {
+                    boolean isAdmin = authentication.getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+                    if (isAdmin) {
+                        response.sendRedirect("/admin/corridas");
+                    } else {
+                        response.sendRedirect("/home");
+                    }
+                })
                 .permitAll()
             )
             .logout(logout -> logout
@@ -63,7 +71,9 @@ public class QuestionMarkSecurityConfig {
 
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
         
-        if (!users.userExists(admin.getUsername())) {
+        if (users.userExists(admin.getUsername())) {
+            users.updateUser(admin);
+        } else {
             users.createUser(admin);
         }
         return users;

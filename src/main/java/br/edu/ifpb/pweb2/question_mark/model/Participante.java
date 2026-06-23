@@ -20,11 +20,8 @@ public class Participante {
  @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nome;
-
-    private Boolean admin;
-
-    @OneToOne(cascade = CascadeType.ALL) // nao sei se vai ser o all aqui
+  
+    @OneToOne
     @JoinColumn(name = "username")
     private User user;
    

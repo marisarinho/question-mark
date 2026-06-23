@@ -29,20 +29,20 @@
 
         <form th:action="@{/login}" method="post">
             
-            <label for="username">Nome de Utilizador</label>
+            <label for="username">Nome</label>
             <input type="text" id="username" name="username" 
                    placeholder="Digite o seu nome" required autofocus />
 
-            <label for="password">Palavra-passe</label>
+            <label for="password">Senha </label>
             <input type="password" id="password" name="password" 
-                   placeholder="Digite a sua palavra-passe" required />
+                   placeholder="Digite a sua senha" required />
 
             <button class="btn btn-block" type="submit" style="margin-top: 15px;">Entrar na corrida</button>
         </form>
 
         <div style="text-align: center; margin-top: 20px; font-size: 0.9em;">
             <span style="color: var(--text-muted);">Ainda não tem conta?</span> 
-            <a th:href="@{/registar}" style="color: var(--primary); text-decoration: none; font-weight: bold;">Registe-se aqui</a>
+            <a th:href="@{/cadastro}" style="color: var(--primary); text-decoration: none; font-weight: bold;"> Se cadastre aqui</a>
         </div>
 
         <div class="footer">
