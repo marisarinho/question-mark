@@ -7,6 +7,7 @@ import br.edu.ifpb.pweb2.question_mark.model.Participante;
 import br.edu.ifpb.pweb2.question_mark.model.User;
 import br.edu.ifpb.pweb2.question_mark.repository.ParticipanteRepository;
 import br.edu.ifpb.pweb2.question_mark.repository.UserRepository;
+import br.edu.ifpb.pweb2.question_mark.exception.RecursoNaoEncontradoException;
 
 @Service
 public class ParticipanteService {
@@ -23,7 +24,8 @@ public class ParticipanteService {
     if (participanteEncontrado == null) {
         participanteEncontrado = new Participante();
 
-        User user = userRepository.findById(username).orElse(null);
+        User user = userRepository.findById(username)
+            .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario nao encontrado."));
         participanteEncontrado.setUser(user);
 
         participanteRepository.save(participanteEncontrado);

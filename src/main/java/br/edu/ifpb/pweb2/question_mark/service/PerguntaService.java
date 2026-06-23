@@ -96,7 +96,7 @@ public class PerguntaService {
 
     public Pergunta getPerguntaPorIndice(Long corridaId, int indice) {
         List<Pergunta> lista_perguntas = findByCorridaId(corridaId);
-        if (indice >= lista_perguntas.size()) {
+        if (indice < 0 || indice >= lista_perguntas.size()) {
             return null;
         }
         return lista_perguntas.get(indice);

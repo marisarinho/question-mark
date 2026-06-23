@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.model.NivelDificuldade;
 import br.edu.ifpb.pweb2.question_mark.model.Pergunta;
+import br.edu.ifpb.pweb2.question_mark.exception.EstadoCorridaInvalidoException;
 import br.edu.ifpb.pweb2.question_mark.service.CorridaService;
 import br.edu.ifpb.pweb2.question_mark.service.PerguntaService;
 
@@ -69,30 +70,41 @@ public class PerguntaController {
     @GetMapping("/{id}/editar")
     public String exibirFormDaPergunta(@PathVariable Long corridaId, @PathVariable Long id, Model model) {
         Pergunta perguntaEncontrada = perguntaService.findById(id);
-            model.addAttribute("pergunta", perguntaEncontrada);
-            model.addAttribute("corridaId", corridaId);
-            model.addAttribute("niveis", NivelDificuldade.values());
+        validarPerguntaDaCorrida(corridaId, perguntaEncontrada);
+
+        model.addAttribute("pergunta", perguntaEncontrada);
+        model.addAttribute("corridaId", corridaId);
+        model.addAttribute("niveis", NivelDificuldade.values());
         return "admin/perguntas/form";
 
     }
     
     @PostMapping("/{id}/editar")
         public String atualizarCorrida(
+                @PathVariable Long corridaId,
                 @PathVariable Long id,
                 Pergunta pergunta,
                 @RequestParam(name = "arquivoImagem", required = false) MultipartFile imagem,
                 @RequestParam(defaultValue = "false") boolean excluirImagem,
                 RedirectAttributes redirectAttributes) {
+                validarPerguntaDaCorrida(corridaId, perguntaService.findById(id));
                 perguntaService.atualizarPergunta(id, pergunta, imagem, excluirImagem);
                 redirectAttributes.addFlashAttribute("mensagem", "Pergunta atualizada com sucesso!");
-                return "redirect:/admin/corridas/{corridaId}/perguntas";
+                return "redirect:/admin/corridas/" + corridaId + "/perguntas";
 
         }
 
     @PostMapping("/{perguntaId}/deletar")
     public String deletar(@PathVariable Long corridaId, @PathVariable Long perguntaId, RedirectAttributes flash) {
-        perguntaService.deletarPergunta(perguntaId);;
+        validarPerguntaDaCorrida(corridaId, perguntaService.findById(perguntaId));
+        perguntaService.deletarPergunta(perguntaId);
         flash.addFlashAttribute("mensagem", "Pergunta removida!");
         return "redirect:/admin/corridas/" + corridaId + "/perguntas";
+    }
+
+    private void validarPerguntaDaCorrida(Long corridaId, Pergunta pergunta) {
+        if (pergunta.getCorrida() == null || !corridaId.equals(pergunta.getCorrida().getId())) {
+            throw new EstadoCorridaInvalidoException("Pergunta nao pertence a corrida informada.");
+        }
     }
 }

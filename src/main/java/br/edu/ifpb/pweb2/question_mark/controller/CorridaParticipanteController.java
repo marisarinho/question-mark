@@ -100,6 +100,7 @@ public class CorridaParticipanteController {
         model.addAttribute("indiceAtual", indice + 1);
         model.addAttribute("tempoRestante", corridaService.tempoRestanteEmSegundos(corridaId, inicio));
         model.addAttribute("corridaId", corridaId);
+        adicionarRespostaDaSessao(session, indice, model);
 
         return "participante/pergunta";
     }
@@ -117,6 +118,11 @@ public class CorridaParticipanteController {
 
         validarCorridaEmAndamento(id, corridaId, indice, inicio);
 
+        Integer perguntaRespondida = (Integer) session.getAttribute("perguntaRespondida");
+        if (indice.equals(perguntaRespondida)) {
+            return "redirect:/corridas/" + id + "/pergunta";
+        }
+
         if (corridaService.tempoEstourado(corridaId, inicio)) {
             return finalizarCorrida(session, principal, "Tempo esgotado!", redirect);
         }
@@ -130,12 +136,18 @@ public class CorridaParticipanteController {
         boolean acertou = perguntaService.verificarResposta(perguntaAtual, resposta);
         Integer ponto = perguntaService.pontoPergunta(perguntaAtual);
 
+        session.setAttribute("perguntaRespondida", indice);
+        session.setAttribute("acertouUltimaResposta", acertou);
+
         if (acertou) {
             Integer pontosAtuais = (Integer) session.getAttribute("pontuacaoAtual");
             session.setAttribute("pontuacaoAtual", perguntaService.calcularPontos(perguntaAtual, pontosAtuais));
+            session.setAttribute("pontoUltimaResposta", ponto);
             redirect.addFlashAttribute("acertou", true);
             redirect.addFlashAttribute("ponto", ponto);
         } else {
+            session.setAttribute("respostaCorretaUltimaResposta",
+                    perguntaService.getTextoRespostaCorreta(perguntaAtual));
             redirect.addFlashAttribute("acertou", false);
             redirect.addFlashAttribute("respostaCorreta", perguntaService.getTextoRespostaCorreta(perguntaAtual));
         }
@@ -153,6 +165,7 @@ public class CorridaParticipanteController {
 
         indice++;
         session.setAttribute("indicePergunta", indice);
+        limparRespostaAtual(session);
 
         Pergunta perguntaAtual = perguntaService.getPerguntaPorIndice(corridaId, indice);
 
@@ -168,6 +181,25 @@ public class CorridaParticipanteController {
             throw new EstadoCorridaInvalidoException(
                     "Volte para o inicio e escolha uma corrida para jogar.");
         }
+    }
+
+    private void adicionarRespostaDaSessao(HttpSession session, Integer indice, Model model) {
+        Integer perguntaRespondida = (Integer) session.getAttribute("perguntaRespondida");
+        if (!indice.equals(perguntaRespondida)) {
+            return;
+        }
+
+        Boolean acertou = (Boolean) session.getAttribute("acertouUltimaResposta");
+        model.addAttribute("acertou", acertou);
+        model.addAttribute("ponto", session.getAttribute("pontoUltimaResposta"));
+        model.addAttribute("respostaCorreta", session.getAttribute("respostaCorretaUltimaResposta"));
+    }
+
+    private void limparRespostaAtual(HttpSession session) {
+        session.removeAttribute("perguntaRespondida");
+        session.removeAttribute("acertouUltimaResposta");
+        session.removeAttribute("pontoUltimaResposta");
+        session.removeAttribute("respostaCorretaUltimaResposta");
     }
 
     private String finalizarCorrida(
@@ -191,6 +223,7 @@ public class CorridaParticipanteController {
         session.removeAttribute("pontuacaoAtual");
         session.removeAttribute("inicioCorrida");
         session.removeAttribute("corridaId");
+        limparRespostaAtual(session);
 
         redirectAttributes.addFlashAttribute("pontosFinais", pontos);
         redirectAttributes.addFlashAttribute("corridaId", corridaId);

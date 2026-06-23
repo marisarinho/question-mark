@@ -16,14 +16,11 @@ import br.edu.ifpb.pweb2.question_mark.repository.AuthorityRepository;
 import br.edu.ifpb.pweb2.question_mark.repository.ParticipanteRepository;
 import br.edu.ifpb.pweb2.question_mark.repository.UserRepository;
 
-
-
-
 @Controller
 @RequestMapping("")
 public class AuthController {
 
-    @Autowired 
+    @Autowired
     private ParticipanteRepository participanteRepository;
 
     @Autowired
@@ -48,15 +45,21 @@ public class AuthController {
     @Transactional
     @PostMapping("/cadastro")
     public String realizarCadastro(String username, String password, RedirectAttributes redirect) {
-        
+        if (username == null || username.isBlank() || password == null || password.isBlank()) {
+            redirect.addFlashAttribute("erro", "Informe usuario e senha para criar a conta.");
+            return "redirect:/cadastro";
+        }
+
+        username = username.trim();
+
         if (userRepository.existsById(username)) {
-            redirect.addFlashAttribute("erro", "Esse nome já está em uso.");
+            redirect.addFlashAttribute("erro", "Esse nome ja esta em uso.");
             return "redirect:/cadastro";
         }
 
         User novoUsuario = new User();
         novoUsuario.setUsername(username);
-        novoUsuario.setPassword(passwordEncoder.encode(password)); 
+        novoUsuario.setPassword(passwordEncoder.encode(password));
         novoUsuario.setEnabled(true);
 
         Authority authority = new Authority();
@@ -70,14 +73,13 @@ public class AuthController {
         participante.setUser(novoUsuario);
         participanteRepository.save(participante);
 
-        redirect.addFlashAttribute("mensagem", "Conta criada com sucesso! Faça login para jogar.");
+        redirect.addFlashAttribute("mensagem", "Conta criada com sucesso! Faca login para jogar.");
         return "redirect:/login";
     }
 
-   @GetMapping("/acesso-negado")
+    @GetMapping("/acesso-negado")
     public String getAcessoNegado() {
-        return "auth/acesso-negado"; 
+        return "auth/acesso-negado";
     }
-    
-    
+
 }
