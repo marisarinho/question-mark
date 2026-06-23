@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro - Question Mark</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="card">
+
+        <div class="logo">
+            <div class="logo-icon">🏁</div>
+            <h1>QUESTION MARK</h1>
+            <p>Junte-se à corrida. Crie sua conta.</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="flash-erro" th:if="${erro}" th:text="${erro}"></div>
+        <div class="flash-ok" th:if="${mensagem}" th:text="${mensagem}"></div>
+
+        <form th:action="@{/cadastro}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <label for="username">Nome de usuário</label>
+            <input type="text" id="username" name="username" required />
+
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" required />
+
+            <button class="btn btn-block" type="submit">Cadastrar</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px; font-size: 0.9em;">
+            <span style="color: var(--text-muted);">Já possui conta?</span> 
+            <a th:href="@{/login}" style="color: var(--primary); text-decoration: none; font-weight: bold;">Faça login aqui</a>
+        </div>
+
+        <div class="footer">
+            Instituto Federal da Paraíba 
+            <span class="badge">IFPB</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-package br.edu.ifpb.pweb2.question_mark.interceptor;
+/*package br.edu.ifpb.pweb2.question_mark.interceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
@@ -14,9 +14,10 @@ public class AuthInteceptor implements HandlerInterceptor{
         Participante participante = (Participante) request.getSession().getAttribute("participanteLogado");
 
         if(participante==null){
-            response.sendRedirect("/login");
+            response.sendRedirect("/cadastro");
             return false;
         }
         return true;
     }
 }
+*/
