@@ -24,6 +24,9 @@ import br.edu.ifpb.pweb2.question_mark.service.ParticipanteService;
 import br.edu.ifpb.pweb2.question_mark.service.PerguntaService;
 import br.edu.ifpb.pweb2.question_mark.service.ResultadoService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @Controller
 @RequestMapping("/corridas")

@@ -11,6 +11,8 @@ import br.edu.ifpb.pweb2.question_mark.model.Corrida;
 import br.edu.ifpb.pweb2.question_mark.model.Participante;
 import br.edu.ifpb.pweb2.question_mark.model.Resultado;
 import br.edu.ifpb.pweb2.question_mark.repository.ResultadoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ResultadoService {
@@ -57,5 +59,15 @@ public class ResultadoService {
             res.setPontuacao(new BigDecimal(pontos));
             res.setDataHora(LocalDateTime.now());
             resultadoRepository.save(res);
+        }
+
+
+        public Page<Resultado> rankingGeral(Pageable pageable) {
+            return resultadoRepository.findAllByOrderByPontuacaoDesc(pageable);
+        }
+
+        public Page<Resultado> rankingCorrida(Long id, Pageable pageable) {
+            Corrida corrida = corridaService.findById(id);
+            return resultadoRepository.findByCorridaOrderByPontuacaoDesc(corrida, pageable);
         }
 }
