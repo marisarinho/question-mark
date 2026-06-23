@@ -28,11 +28,13 @@ public class CorridaService {
 
 
     public Corrida saveCorrida(Corrida corrida){
+        validarCorrida(corrida);
         return corridaRepository.save(corrida);
     
     }
     
     public Corrida atualizarCorrida(Long id, Corrida corrida){
+        validarCorrida(corrida);
         Corrida corridaEncontrada = findById(id);
         corridaEncontrada.setTitulo(corrida.getTitulo());
         corridaEncontrada.setDescricao(corrida.getDescricao());
@@ -57,6 +59,24 @@ public class CorridaService {
             long segundosPassados = ChronoUnit.SECONDS.between(inicioCorrida, LocalDateTime.now());
             return segundosPassados>=tempoSegundos;
         }
+
+    private void validarCorrida(Corrida corrida) {
+        if (corrida.getTitulo() == null || corrida.getTitulo().isBlank()) {
+            throw new IllegalArgumentException("Informe o titulo da corrida.");
+        }
+
+        if (corrida.getDescricao() == null || corrida.getDescricao().isBlank()) {
+            throw new IllegalArgumentException("Informe a descricao da corrida.");
+        }
+
+        if (corrida.getTempoSegundos() == null || corrida.getTempoSegundos() <= 0) {
+            throw new IllegalArgumentException("O tempo da corrida precisa ser maior que zero.");
+        }
+
+        if (corrida.getAtiva() == null) {
+            corrida.setAtiva(false);
+        }
+    }
     public Integer tempoSegundos(Long corridaId){
         Corrida corrida = findById(corridaId);
         return corrida.getTempoSegundos();
