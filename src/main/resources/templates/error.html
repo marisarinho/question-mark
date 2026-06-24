@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Ops! Algo deu errado</title>
+</head>
+<main class="pagina-erro" layout:fragment="conteudo">
+    <div class="card card-erro">
+        <div class="icone-erro">❔</div>
+        <span class="codigo-erro" th:text="${status} ?: 'Erro'">Erro</span>
+        <div th:switch="${status}">
+            <div th:case="400">
+                <h1>🤔 Não conseguimos entender esse pedido</h1>
+                <p>Confira os dados informados e tente outra vez.</p>
+            </div>
+            <div th:case="404">
+                <h1>🔎 Não encontramos isso</h1>
+                <p>A página ou informação procurada não está disponível.</p>
+            </div>
+            <div th:case="409">
+                <h1>🏁 Essa corrida já não está em andamento</h1>
+                <p>Volte para o início e escolha uma corrida para jogar.</p>
+            </div>
+            <div th:case="*">
+                <h1>💜 O Question Mark tropeçou</h1>
+                <p>Não foi possível abrir esta página. Tente novamente em instantes.</p>
+            </div>
+        </div>
+
+        <div class="acoes-erro">
+            <button type="button" class="btn btn-secundario" onclick="history.back()">Voltar</button>
+            <a th:href="@{/}" class="btn">Ir para o início</a>
+        </div>
+    </div>
+</main>
+</html>
