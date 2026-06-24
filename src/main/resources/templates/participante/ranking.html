@@ -30,6 +30,18 @@
                     Você ainda não participou de nenhuma corrida!
                 </div>
 
+                <form class="form-tamanho-pagina" th:action="@{/corridas/ranking}" method="get">
+                    <label for="size">Linhas por página:</label>
+                    <select id="size" name="size" onchange="this.form.submit()">
+                        <option th:each="opcao : ${opcoesTamanho}"
+                                th:value="${opcao}"
+                                th:text="${opcao}"
+                                th:selected="${opcao == tamanhoPagina}">
+                        </option>
+                    </select>
+                    <input type="hidden" name="page" value="0">
+                </form>
+
                 <div style="overflow-x: auto;">
                     <table class="tabela-ranking">
                         <thead>
@@ -44,7 +56,7 @@
                         <tbody>
                             <tr th:each="resultado, resultadoStat : ${ranking}"
                                 th:class="${resultado.participante.id == participanteLogado.id} ? 'destaque' : ''">
-                                <td th:text="${resultadoStat.index + 1}"></td>
+                                <td th:text="${paginaAtual * tamanhoPagina + resultadoStat.index + 1}"></td>
                                 <td th:text="${resultado.participante.user.username}"></td>
                                 <td th:text="${resultado.corrida.titulo}"></td>
                                 <td th:text="${resultado.pontuacao}"></td>
@@ -52,6 +64,42 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="paginacao" th:if="${totalPaginas > 0}">
+                    <form th:action="@{/corridas/ranking}" method="get">
+                        <input type="hidden" name="page" value="0">
+                        <input type="hidden" name="size" th:value="${tamanhoPagina}">
+                        <button type="submit" class="page-btn" th:disabled="${paginaAtual == 0}">
+                            &lt;&lt;
+                        </button>
+                    </form>
+
+                    <form th:action="@{/corridas/ranking}" method="get">
+                        <input type="hidden" name="page" th:value="${paginaAtual - 1}">
+                        <input type="hidden" name="size" th:value="${tamanhoPagina}">
+                        <button type="submit" class="page-btn" th:disabled="${paginaAtual == 0}">
+                            Anterior
+                        </button>
+                    </form>
+
+                    <button type="button" class="page-btn active" th:text="${paginaAtual + 1}" disabled></button>
+
+                    <form th:action="@{/corridas/ranking}" method="get">
+                        <input type="hidden" name="page" th:value="${paginaAtual + 1}">
+                        <input type="hidden" name="size" th:value="${tamanhoPagina}">
+                        <button type="submit" class="page-btn" th:disabled="${paginaAtual + 1 >= totalPaginas}">
+                            Próxima
+                        </button>
+                    </form>
+
+                    <form th:action="@{/corridas/ranking}" method="get">
+                        <input type="hidden" name="page" th:value="${totalPaginas - 1}">
+                        <input type="hidden" name="size" th:value="${tamanhoPagina}">
+                        <button type="submit" class="page-btn" th:disabled="${paginaAtual + 1 >= totalPaginas}">
+                            &gt;&gt;
+                        </button>
+                    </form>
                 </div>
 
             </div>

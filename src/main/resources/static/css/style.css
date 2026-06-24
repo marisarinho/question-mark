@@ -466,3 +466,36 @@ form button[type="submit"] {
 .paginacao form:last-child .page-btn {
     border-radius: 0 6px 6px 0;
 }
+
+
+.form-tamanho-pagina {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.form-tamanho-pagina label {
+    margin: 0;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.form-tamanho-pagina select {
+    width: auto;
+    padding: 8px 12px;
+    border: 1px solid #d1c4e9;
+    border-radius: 8px;
+    background-color: var(--white);
+    color: var(--text-dark);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.form-tamanho-pagina select:focus {
+    border-color: var(--purple-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(123, 44, 191, 0.2);
+}
