@@ -192,33 +192,61 @@ public class CorridaParticipanteController {
     }
 
     @GetMapping("/ranking")
-    public String exibirRanking(Principal principal, Model model) {
-        List<Resultado> ranking = resultadoService.rankingGeral();
-        Participante participante = getParticipante(principal);
-        Boolean temResultado = resultadoService.participanteTemResultado(participante);
+    public String exibirRanking(
+                Principal principal,
+                Model model,
+                @RequestParam(defaultValue = "0") int page,
+                @RequestParam(defaultValue = "5") int size) {
 
-        model.addAttribute("ranking", ranking);
-        model.addAttribute("participanteLogado", participante);
-        model.addAttribute("temResultado", temResultado);
+           
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Resultado> rankingPage = resultadoService.rankingGeral(pageable);
 
-        return "participante/ranking";
-    }
+            Participante participante = getParticipante(principal);
+            Boolean temResultado = resultadoService.participanteTemResultado(participante);
+
+            model.addAttribute("ranking", rankingPage.getContent());
+            model.addAttribute("paginaAtual", page);
+            model.addAttribute("totalPaginas", rankingPage.getTotalPages());
+            model.addAttribute("totalItens", rankingPage.getTotalElements());
+            model.addAttribute("tamanhoPagina", size);
+            model.addAttribute("opcoesTamanho", List.of(2, 3, 5, 10, 20));
+
+            model.addAttribute("participanteLogado", participante);
+            model.addAttribute("temResultado", temResultado);
+
+            return "participante/ranking";
+        }
 
     @GetMapping("/{id}/ranking")
-    public String exibirRankingPorCorrida(@PathVariable Long id, Principal principal, Model model) {
+    public String exibirRankingPorCorrida(
+            @PathVariable Long id,
+            Principal principal,
+            Model model,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
+
         Corrida corrida = corridaService.findById(id);
         Participante participante = getParticipante(principal);
-        List<Resultado> ranking = resultadoService.rankingCorrida(id);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Resultado> rankingPage = resultadoService.rankingCorrida(id, pageable);
+
         Boolean temResultado = resultadoService.existsByParticipanteAndCorrida(participante, corrida);
 
-        model.addAttribute("ranking", ranking);
+        model.addAttribute("ranking", rankingPage.getContent());
+        model.addAttribute("paginaAtual", page);
+        model.addAttribute("totalPaginas", rankingPage.getTotalPages());
+        model.addAttribute("totalItens", rankingPage.getTotalElements());
+        model.addAttribute("tamanhoPagina", size);
+        model.addAttribute("opcoesTamanho", List.of(2, 3, 5, 10, 20));
+
         model.addAttribute("participanteLogado", participante);
         model.addAttribute("temResultado", temResultado);
         model.addAttribute("corrida", corrida);
 
         return "participante/rankingCorrida";
     }
-
     private Participante getParticipante(Principal principal) {
         return participanteService.logarParticipante(principal.getName());
     }

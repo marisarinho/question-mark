@@ -426,3 +426,43 @@ form button[type="submit"] {
     font-size: inherit;
     padding: 10px 18px;
 }
+
+.paginacao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.paginacao form {
+    margin: 0;
+}
+
+.page-btn {
+    padding: 10px 18px;
+    border: 1px solid #dee2e6;
+    color: var(--purple-primary);
+    background-color: white;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.page-btn.active {
+    color: #0d6efd;
+    cursor: default;
+}
+
+.page-btn:disabled {
+    color: #adb5bd;
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.paginacao form:first-child .page-btn {
+    border-radius: 6px 0 0 6px;
+}
+
+.paginacao form:last-child .page-btn {
+    border-radius: 0 6px 6px 0;
+}
